@@ -18,12 +18,12 @@
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1 class="m-0">Danh mục từ thiện</h1>
+                            <h1 class="m-0">Bài viết</h1>
                         </div><!-- /.col -->
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
                                 <li class="breadcrumb-item"><a href="#">Trang Chủ</a></li>
-                                <li class="breadcrumb-item active">Quản Lý Danh Mục</li>
+                                <li class="breadcrumb-item active">Quản Lý Bài Viết</li>
                             </ol>
                         </div><!-- /.col -->
                     </div><!-- /.row -->
@@ -37,31 +37,33 @@
                     <!-- Main row -->
                     <div class="row">
                         <div class="col-12">
-                            <a href="/admin/category/create" class="btn btn-primary mb-3">
-                                <i class="bi bi-plus-circle-fill"></i> Thêm Mới Danh Mục
+                            <a href="/admin/article/create" class="btn btn-primary mb-3">
+                                <i class="bi bi-plus-circle-fill"></i> Thêm Mới Bài Viết
                             </a>
                             <div class="card">
                                 <div class="card-header">
-                                    <h3 class="card-title">Danh Sách Danh Mục</h3>
+                                    <h3 class="card-title">Danh Sách Bài Viết</h3>
                                 </div>
                                 <!-- /.card-header -->
                                 <div class="card-body">
-                                    <table id="categoryDataTable" class="table table-bordered table-hover">
+                                    <table id="example1" class="table table-bordered table-hover">
                                         <thead>
                                             <tr>
                                                 <th>ID</th>
-                                                <th>Danh Mục</th>
-                                                <th>Mô Tả</th>
+                                                <th>Tiêu Đề</th>
+                                                <th>Ngày Tạo</th>
+                                                <th>Cập Nhật Gần Nhất</th>
                                                 <th>Trạng Thái</th>
                                                 <th>Thao Tác</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td>1</td>
-                                                <td>Hỗ Trợ Tài Chính</td>
-                                                <td>Hỗ trợ sinh viên có hoàn cảnh khó khăn</td>
-                                                <td>Hiển thị</td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
                                                 <td>
                                                     <button class="btn btn-warning">
                                                         <i class="bi bi-pencil-square"></i>
@@ -94,7 +96,6 @@
     <!-- REQUIRED SCRIPTS -->
 
     <div th:replace="admin/fragments/script :: script"></div>
-    <script th:src="@{/admin/dist/js/category.js}"></script>
 </body>
 
 </html>

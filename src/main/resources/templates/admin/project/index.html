@@ -46,7 +46,7 @@
                                 </div>
                                 <!-- /.card-header -->
                                 <div class="card-body">
-                                    <table id="example1" class="table table-bordered table-hover">
+                                    <table id="projectDataTable" class="table table-bordered table-hover">
                                         <thead>
                                             <tr>
                                                 <th>ID</th>
@@ -100,6 +100,8 @@
     <!-- REQUIRED SCRIPTS -->
 
     <div th:replace="admin/fragments/script :: script"></div>
+    <script th:src="@{/admin/dist/js/project.js}"></script>
+
 </body>
 
 </html>
