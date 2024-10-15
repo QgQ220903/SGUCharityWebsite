@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:replace="admin/fragments/head :: head"></head>
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+
+    <nav th:replace="admin/fragments/nav :: nav"></nav>
+
+    <aside th:replace="admin/fragments/aside :: aside"></aside>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-4">
+                        <form action="">
+                            <div class="input-group">
+                                <input type="search" class="form-control form-control-lg" placeholder="Type your keywords here">
+                                <div class="input-group-append">
+                                    <button type="submit" class="btn btn-lg btn-default">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-sm-8">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item active">User</li>
+                        </ol>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <h3 class="card-title ">Quản lý người dùng</h3>
+                                    </div>
+                                    <div class="col-lg-8">
+                                        <div class="float-sm-right">
+                                            <a th:href="@{/admin/user/add}">
+                                                <button type="button" class="btn btn-block btn-primary">
+                                                    <i class="fa-solid fa-circle-plus"></i> Thêm
+                                                </button>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body">
+                                <table id="example2" class="table table-bordered table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Role</th>
+                                        <th>Full Name</th>
+                                        <th>Phone</th>
+                                        <th>Email</th>
+                                        <th>Donate Count</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>
+                                            Admin
+                                        </td>
+                                        <td>Tran Quang Truong</td>
+                                        <td>0824431088</td>
+                                        <td>truong753@gmail.com</td>
+                                        <td>2</td>
+                                        <td>
+                                            <div class="d-flex justify-content-center align-items-stretch">
+                                                <button type="button" class="btn btn-info btn-sm w-100">
+                                                    <i class="fa-solid fa-eye"></i>
+                                                </button>
+                                                <button type="button" class="mx-2 btn btn-danger btn-sm w-100">
+                                                    <i class="fa-solid fa-trash"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-warning btn-sm w-100">
+                                                    <i class="fa-solid fa-pen"></i>
+                                                </button>
+                                            </div>
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td>
+                                            Admin
+                                        </td>
+                                        <td>Tran Quang Truong</td>
+                                        <td>0824431088</td>
+                                        <td>truong753@gmail.com</td>
+                                        <td>2</td>
+                                        <td>
+                                            <div class="d-flex justify-content-center align-items-stretch">
+                                                <button type="button" class="btn btn-info btn-sm w-100">
+                                                    <i class="fa-solid fa-eye"></i>
+                                                </button>
+                                                <button type="button" class="mx-2 btn btn-danger btn-sm w-100">
+                                                    <i class="fa-solid fa-trash"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-warning btn-sm w-100">
+                                                    <i class="fa-solid fa-pen"></i>
+                                                </button>
+                                            </div>
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>3</td>
+                                        <td>
+                                            Admin
+                                        </td>
+                                        <td>Tran Quang Truong</td>
+                                        <td>0824431088</td>
+                                        <td>truong753@gmail.com</td>
+                                        <td>2</td>
+                                        <td>
+                                            <div class="d-flex justify-content-center align-items-stretch">
+                                                <button type="button" class="btn btn-info btn-sm w-100">
+                                                    <i class="fa-solid fa-eye"></i>
+                                                </button>
+                                                <button type="button" class="mx-2 btn btn-danger btn-sm w-100">
+                                                    <i class="fa-solid fa-trash"></i>
+                                                </button>
+                                                <button type="button" class="btn btn-warning btn-sm w-100">
+                                                    <i class="fa-solid fa-pen"></i>
+                                                </button>
+                                            </div>
+
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                    <tfoot>
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Role</th>
+                                        <th>Full Name</th>
+                                        <th>Phone</th>
+                                        <th>Email</th>
+                                        <th>Donate Count</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                        <!-- /.card -->
+
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+            </div>
+            <!-- /.container-fluid -->
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+
+    <!-- Main Footer -->
+    <footer th:replace="admin/fragments/footer :: footer"></footer>
+</div>
+<!-- ./wrapper -->
+
+<!-- REQUIRED SCRIPTS -->
+
+<div th:replace="admin/fragments/script :: script"></div>
+<script>
+    $(function () {
+      $("#example1").DataTable({
+        "responsive": true, "lengthChange": false, "autoWidth": false,
+        "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+      }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+      $('#example2').DataTable({
+        "paging": true,
+        "lengthChange": false,
+        "searching": false,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+        "responsive": true,
+      });
+    });
+</script>
+</body>
+
+</html>
