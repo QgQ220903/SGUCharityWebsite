@@ -4,12 +4,12 @@
 <head th:replace="admin/fragments/head :: head"></head>
 
 <body class="hold-transition sidebar-mini">
+
     <div class="wrapper">
 
         <nav th:replace="admin/fragments/nav :: nav"></nav>
 
         <aside th:replace="admin/fragments/aside :: aside"></aside>
-
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
@@ -18,12 +18,12 @@
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1 class="m-0">Dự án từ thiện</h1>
+                            <h1 class="m-0">Danh mục từ thiện</h1>
                         </div><!-- /.col -->
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
                                 <li class="breadcrumb-item"><a href="#">Trang Chủ</a></li>
-                                <li class="breadcrumb-item active">Quản Lý Dự Án</li>
+                                <li class="breadcrumb-item active">Quản Lý Danh Mục</li>
                             </ol>
                         </div><!-- /.col -->
                     </div><!-- /.row -->
@@ -37,37 +37,31 @@
                     <!-- Main row -->
                     <div class="row">
                         <div class="col-12">
-                            <a href="/admin/project/create" class="btn btn-primary mb-3">
-                                <i class="bi bi-plus-circle-fill"></i> Thêm Mới Dự Án
+                            <a href="/admin/category/create" class="btn btn-primary mb-3">
+                                <i class="bi bi-plus-circle-fill"></i> Thêm Mới Danh Mục
                             </a>
                             <div class="card">
                                 <div class="card-header">
-                                    <h3 class="card-title">Danh Sách Dự Án</h3>
+                                    <h3 class="card-title">Danh Sách Danh Mục</h3>
                                 </div>
                                 <!-- /.card-header -->
-                                <div class="card-body" id="projectDataTableWrapper">
-                                    <table id="projectDataTable" class="table table-bordered table-hover">
+                                <div class="card-body" id="categoryDataTableWrapper">
+                                    <table id="categoryDataTable" class="table table-bordered table-hover">
                                         <thead>
                                             <tr>
                                                 <th>ID</th>
                                                 <th>Danh Mục</th>
-                                                <th>Tiêu Đề</th>
-                                                <th>Mục Tiêu</th>
-                                                <th>Hiện Tại</th>
-                                                <th>Bắt Đầu</th>
-                                                <th>Kết thúc</th>
-                                                <th>Thao Tác </th>
+                                                <th>Mô Tả</th>
+                                                <th>Trạng Thái</th>
+                                                <th>Thao Tác</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr>
                                                 <td>1</td>
-                                                <td>Học bổng</td>
-                                                <td>Học bổng cho sinh viên có hoàn cảnh khó khăn</td>
-                                                <td>50.000.000đ</td>
-                                                <td>25.000.000đ</td>
-                                                <td>16/10/2024</td>
-                                                <td>16/12/2024</td>
+                                                <td>Hỗ Trợ Tài Chính</td>
+                                                <td>Hỗ trợ sinh viên có hoàn cảnh khó khăn</td>
+                                                <td>Hiển thị</td>
                                                 <td>
                                                     <button class="btn btn-warning">
                                                         <i class="bi bi-pencil-square"></i>
@@ -100,8 +94,7 @@
     <!-- REQUIRED SCRIPTS -->
 
     <div th:replace="admin/fragments/script :: script"></div>
-    <script th:src="@{/admin/dist/js/project.js}"></script>
-
+    <script th:src="@{/admin/dist/js/category.js}"></script>
 </body>
 
 </html>
