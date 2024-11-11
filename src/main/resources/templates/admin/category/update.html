@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:replace="admin/fragments/head :: head"></head>
+
+<body class="hold-transition sidebar-mini">
+
+  <div class="wrapper">
+
+    <nav th:replace="admin/fragments/nav :: nav"></nav>
+
+    <aside th:replace="admin/fragments/aside :: aside"></aside>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <div class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h1 class="m-0">Cập Nhật Danh Mục</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+              <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a th:href="@{/admin/home}">Trang Chủ</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/admin/category}">Quản Lý Danh Mục</a></li>
+                <li class="breadcrumb-item active">Thêm Danh Mục</li>
+
+              </ol>
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+      </div>
+      <!-- /.content-header -->
+
+      <!-- Main content -->
+      <section class="content">
+        <div class="container-fluid">
+          <!-- Main row -->
+          <div class="row">
+            <div class="col-12">
+              <!-- general form elements -->
+              <div class="card card-primary">
+                <div class="card-header">
+                  <h3 class="card-title">Thêm danh mục</h3>
+                </div>
+                <!-- /.card-header -->
+                <!-- form start -->
+                <form role="form" method="post" th:action="@{/admin/category/update/{id}(id=${category.id})}"
+                  th:object="${category}">
+                  <div class="card-body">
+                    <div class="form-group">
+                      <input type="hidden" class="form-control" th:field="*{id}">
+                      <label for="name">Tên danh mục</label>
+                      <input type="text" class="form-control" id="name" th:field="*{name}" name="name">
+                      <span th:if="${#fields.hasErrors('name')}" class="text-danger" th:errors="*{name}"></span>
+                    </div>
+                    <div class="form-group">
+                      <label for="description">Mô tả</label>
+                      <textarea type="text" class="form-control" id="description" rows="7" th:field="*{description}"
+                        name="description"></textarea>
+                      <span th:if="${#fields.hasErrors('description')}" class="text-danger"
+                        th:errors="*{description}"></span>
+                    </div>
+                  </div>
+                  <div class="card-footer">
+                    <button type="submit" class="btn btn-primary">Sửa</button>
+                    <a href="/admin/category" class="btn btn-danger">Hủy</a>
+                  </div>
+                </form>
+              </div>
+              <!-- /.card -->
+            </div>
+          </div>
+          <!-- /.row (main row) -->
+        </div><!-- /.container-fluid -->
+      </section>
+      <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+
+    <!-- Main Footer -->
+    <footer th:replace="admin/fragments/footer :: footer"></footer>
+  </div>
+  <!-- ./wrapper -->
+
+  <!-- REQUIRED SCRIPTS -->
+
+  <div th:replace="admin/fragments/script :: script"></div>
+</body>
+
+</html>

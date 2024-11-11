@@ -1,9 +1,9 @@
 <!-- Main Sidebar Container -->
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="/admin/home" class="brand-link">
-        <img th:src="@{/admin/dist/img/SGU-LOGO.png}" alt="AdminLTE Logo"
-             class="brand-image img-circle elevation-3" style="opacity: .8">
+    <a th:href="@{/admin/home}" class="brand-link">
+        <img th:src="@{/admin/dist/img/SGU-LOGO.png}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
+            style="opacity: .8">
         <span class="brand-text font-weight-light">SGU Charity</span>
     </a>
 
@@ -21,10 +21,9 @@
 
         <!-- Sidebar Menu -->
         <nav class="mt-2">
-            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
-                data-accordion="false">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <li class="nav-item">
-                    <a href="/admin/home" class="nav-link">
+                    <a th:href="@{/admin/home}" class="nav-link">
                         <i class="bi bi-pie-chart-fill"></i>
                         <p>
                             Trang Chủ
@@ -32,7 +31,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="/admin/category" class="nav-link">
+                    <a th:href="@{/admin/category}" class="nav-link">
                         <i class="bi bi-stack"></i>
                         <p>
                             Danh Mục Từ Thiện
@@ -40,7 +39,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="/admin/project" class="nav-link">
+                    <a th:href="@{/admin/project}" class="nav-link">
                         <i class="bi bi-hearts"></i>
                         <p>
                             Chương Trình Từ Thiện
@@ -48,7 +47,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="/admin/article" class="nav-link">
+                    <a th:href="@{/admin/article}" class="nav-link">
                         <i class="bi bi-newspaper"></i>
                         <p>
                             Bài Viết
@@ -56,18 +55,10 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="/admin/user/" class="nav-link">
+                    <a th:href="@{/admin/user}" class="nav-link">
                         <i class="bi bi-people-fill"></i>
                         <p>
                             Người Dùng
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="/admin/user/" class="nav-link">
-                        <i class="bi bi-shield-fill-check"></i>
-                        <p>
-                            Nhóm Quyền
                         </p>
                     </a>
                 </li>

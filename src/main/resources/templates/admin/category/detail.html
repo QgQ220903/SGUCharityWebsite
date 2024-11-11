@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:replace="admin/fragments/head :: head"></head>
+
+<body class="hold-transition sidebar-mini">
+
+  <div class="wrapper">
+
+    <nav th:replace="admin/fragments/nav :: nav"></nav>
+
+    <aside th:replace="admin/fragments/aside :: aside"></aside>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <div class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h1 class="m-0">Chi Tiết Danh Mục</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+              <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a th:href="@{/admin/home}">Trang Chủ</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/admin/category}">Quản Lý Danh Mục</a></li>
+                <li class="breadcrumb-item active">Chi Tiết Danh Mục</li>
+
+              </ol>
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+      </div>
+      <!-- /.content-header -->
+
+      <!-- Main content -->
+      <section class="content">
+        <div class="container-fluid">
+          <!-- Main row -->
+          <div class="row">
+            <div class="col-12">
+              <!-- general form elements -->
+              <div class="card card-primary">
+                <div class="card-header">
+                  <h3 class="card-title">Thông Tin danh mục</h3>
+                </div>
+                <!-- /.card-header -->
+                <!-- form start -->
+                <form role="form" method="post" th:action="@{/admin/category/detail/{id}(id=${category.id})}"
+                  th:object="${category}">
+                  <div class="card-body row">
+                    <div class="form-group col-lg-6">
+                      <label for="id">Mã Danh Mục</label>
+                      <input type="text" class="form-control" id="id" th:field="*{id}" name="id" disabled>
+                    </div>
+                    <div class="form-group col-lg-6">
+                      <label for="name">Tên danh mục</label>
+                      <input type="text" class="form-control" id="name" th:field="*{name}" name="name" disabled>
+                    </div>
+                    <div class="form-group col-lg-6">
+                      <label for="createOn">Ngày Tạo</label>
+                      <input type="text" class="form-control" id="createOn" th:field="*{createOn}" name="createOn"
+                        disabled>
+                    </div>
+                    <div class="form-group col-lg-6">
+                      <label for="updateOn">Cập Nhật Gần Nhất</label>
+                      <input type="text" class="form-control" id="updateOn" th:field="*{updatedOn}" name="updateOn"
+                        disabled>
+                    </div>
+                    <div class="form-group col-lg-12">
+                      <label for="description">Mô tả</label>
+                      <textarea type="text" class="form-control" id="description" rows="7" th:field="*{description}"
+                        name="description" disabled></textarea>
+                      <span th:if="${#fields.hasErrors('description')}" class="text-danger"
+                        th:errors="*{description}"></span>
+                    </div>
+                  </div>
+                  <div class="card-footer">
+                    <a href="/admin/category" class="btn btn-danger">Hủy</a>
+                  </div>
+                </form>
+              </div>
+              <!-- /.card -->
+            </div>
+          </div>
+          <!-- /.row (main row) -->
+        </div><!-- /.container-fluid -->
+      </section>
+      <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+
+    <!-- Main Footer -->
+    <footer th:replace="admin/fragments/footer :: footer"></footer>
+  </div>
+  <!-- ./wrapper -->
+
+  <!-- REQUIRED SCRIPTS -->
+
+  <div th:replace="admin/fragments/script :: script"></div>
+</body>
+
+</html>

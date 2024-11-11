@@ -37,6 +37,7 @@
                     <!-- Main row -->
                     <div class="row">
                         <div class="col-12">
+
                             <a href="/admin/category/create" class="btn btn-primary mb-3">
                                 <i class="bi bi-plus-circle-fill"></i> Thêm Mới Danh Mục
                             </a>
@@ -52,23 +53,27 @@
                                                 <th>ID</th>
                                                 <th>Danh Mục</th>
                                                 <th>Mô Tả</th>
-                                                <th>Trạng Thái</th>
                                                 <th>Thao Tác</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>Hỗ Trợ Tài Chính</td>
-                                                <td>Hỗ trợ sinh viên có hoàn cảnh khó khăn</td>
-                                                <td>Hiển thị</td>
+                                            <tr th:each="category : ${categories}">
+                                                <td th:text="${category.id}"></td>
+                                                <td th:text="${category.name}"></td>
+                                                <td th:text="${category.description}"></td>
                                                 <td>
-                                                    <button class="btn btn-warning">
-                                                        <i class="bi bi-pencil-square"></i>
-                                                    </button>
-                                                    <button class="btn btn-danger">
-                                                        <i class="bi bi-trash-fill"></i>
-                                                    </button>
+                                                    <a th:href="@{/admin/category/update/{id}(id=${category.id})}"
+                                                        class="btn btn-warning">
+                                                        <i class="bi bi-pencil-square"></i> Sửa
+                                                    </a>
+                                                    <a th:href="@{/admin/category/delete/{id}(id=${category.id})}"
+                                                        class="btn btn-danger btn-delete">
+                                                        <i class="bi bi-trash-fill"></i> Xóa
+                                                    </a>
+                                                    <a th:href="@{/admin/category/detail/{id}(id=${category.id})}"
+                                                        class="btn btn-primary">
+                                                        <i class="bi bi-eye"></i> Chi Tiết
+                                                    </a>
                                                 </td>
                                         </tbody>
                                     </table>
@@ -95,6 +100,7 @@
 
     <div th:replace="admin/fragments/script :: script"></div>
     <script th:src="@{/admin/dist/js/category.js}"></script>
+
 </body>
 
 </html>
