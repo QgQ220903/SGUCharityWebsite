@@ -50,28 +50,36 @@
                                         <thead>
                                             <tr>
                                                 <th>ID</th>
-                                                <th>Danh Mục</th>
-                                                <th>Tiêu Đề</th>
-                                                <th>Bắt Đầu</th>
-                                                <th>Kết thúc</th>
+                                                <th>Tên dự án</th>
+                                                <th>Ngày bắt đầu</th>
+                                                <th>Ngày kết thúc</th>
+                                                <th>Mục tiêu dự án</th>
+                                                <th>Đã đạt được</th>
                                                 <th>Thao Tác </th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>Học bổng</td>
-                                                <td>Học bổng cho sinh viên có hoàn cảnh khó khăn</td>
-                                                <td>16/10/2024</td>
-                                                <td>16/12/2024</td>
-                                                <td>
-                                                    <button class="btn btn-warning">
-                                                        <i class="bi bi-pencil-square"></i>
-                                                    </button>
-                                                    <button class="btn btn-danger">
-                                                        <i class="bi bi-trash-fill"></i>
-                                                    </button>
-                                                </td>
+                                        <tr th:each="project : ${projects}">
+                                            <td th:text="${project.id}"></td>
+                                            <td th:text="${project.name}"></td>
+                                            <td th:text="${project.startTime}"></td>
+                                            <td th:text="${project.endTime}"></td>
+                                            <td th:text="${project.formattedTargetAmount}">0 VNĐ</td>
+                                            <td th:text="${project.formattedCurrentAmount}">0 VNĐ</td>
+                                            <td>
+                                                <a th:href="@{/admin/project/update/{id}(id=${project.id})}"
+                                                   class="btn btn-warning">
+                                                    <i class="bi bi-pencil-square"></i> Sửa
+                                                </a>
+                                                <a th:href="@{/admin/project/delete/{id}(id=${project.id})}"
+                                                   class="btn btn-danger btn-delete">
+                                                    <i class="bi bi-trash-fill"></i> Xóa
+                                                </a>
+                                                <a th:href="@{/admin/project/detail/{id}(id=${project.id})}"
+                                                   class="btn btn-primary">
+                                                    <i class="bi bi-eye"></i> Chi Tiết
+                                                </a>
+                                            </td>
                                         </tbody>
                                     </table>
                                 </div>
