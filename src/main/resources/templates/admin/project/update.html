@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:replace="admin/fragments/head :: head"></head>
+
+<body class="hold-transition sidebar-mini">
+
+<div class="wrapper">
+
+    <nav th:replace="admin/fragments/nav :: nav"></nav>
+
+    <aside th:replace="admin/fragments/aside :: aside"></aside>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0">Cập Nhật Dự Án</h1>
+                    </div><!-- /.col -->
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a th:href="@{/admin/home}">Trang Chủ</a></li>
+                            <li class="breadcrumb-item"><a th:href="@{/admin/project}">Quản Lý Dự Án</a></li>
+                            <li class="breadcrumb-item active">Thêm Dự Án</li>
+
+                        </ol>
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </div>
+        <!-- /.content-header -->
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <!-- Main row -->
+                <div class="row">
+                    <div class="col-12">
+                        <!-- general form elements -->
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">Cập nhật dự án</h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <!-- form start -->
+                            <form role="form" method="post" th:action="@{/admin/project/update/{id}(id=${project.id})}"
+                                  th:object="${project}">
+                                <div class="card-body">
+                                    <div class="form-group">
+                                        <input type="hidden" class="form-control" th:field="*{id}">
+                                        <label for="name">Tên dự án</label>
+                                        <input type="text" class="form-control" id="name" th:field="*{name}" name="name">
+                                        <span th:if="${#fields.hasErrors('name')}" class="text-danger" th:errors="*{name}"></span>
+                                        <label for="name">Danh mục</label>
+                                        <select class="form-control" th:field="*{categoryId}">
+                                            <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}">
+                                            </option>
+                                        </select>
+                                        <label for="targetAmount">Mục tiêu dự án</label>
+                                        <input type="text" class="form-control" id="targetAmount" th:value="${formattedTargetAmount}" name="targetAmount">
+                                        <span th:if="${#fields.hasErrors('targetAmount')}" class="text-danger" th:errors="*{targetAmount}"></span>
+                                        <label for="currentAmount">Đã đạt được</label>
+                                        <input type="text" class="form-control" id="currentAmount" th:value="${project.formattedCurrentAmount}" name="currentAmount" disabled>
+                                        <input type="hidden" th:field="*{currentAmount}">
+                                        <span th:if="${#fields.hasErrors('currentAmount')}" class="text-danger" th:errors="*{currentAmount}"></span>
+                                        <label>Ngày bắt đầu</label>
+                                        <div class="input-group date" id="startDate" data-target-input="nearest">
+                                            <input type="text" class="form-control datetimepicker-input"
+                                                   data-target="#startDate" th:field="*{startTime}" disabled>
+                                            <input type="hidden" th:field="*{startTime}">
+                                            <div class="input-group-append" data-target="#startDate"
+                                                 data-toggle="datetimepicker">
+                                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                            </div>
+                                        </div>
+                                        <label>Ngày kết thúc:</label>
+                                        <div class="input-group date" id="endDate" data-target-input="nearest">
+                                            <input type="text" class="form-control datetimepicker-input"
+                                                   data-target="#endDate" th:field="*{endTime}">
+                                            <div class="input-group-append" data-target="#endDate"
+                                                 data-toggle="datetimepicker">
+                                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="card card-outline card-info">
+                                            <div class="card-header">
+                                                <h3 class="card-title">
+                                                    Nội dung
+                                                </h3>
+                                            </div>
+                                            <!-- /.card-header -->
+                                            <div class="card-body">
+                                                <textarea id="summernote" th:field="*{content}"></textarea>
+                                            </div>
+                                            <div class="card-footer">
+                                            </div>
+                                        </div>
+                                        <label for="status">Trạng Thái</label>
+                                        <select class="form-control" th:field="*{status}" id="status" name="status">
+                                            <option th:value="'Chờ duyệt'" th:text="'Chờ duyệt'"></option>
+                                            <option th:value="'Đã duyệt'" th:text="'Đã duyệt'"></option>
+                                            <option th:value="'Từ chối'" th:text="'Từ chối'"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <button type="submit" class="btn btn-primary">Sửa</button>
+                                    <a href="/admin/project" class="btn btn-danger">Hủy</a>
+                                </div>
+                            </form>
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                </div>
+                <!-- /.row (main row) -->
+            </div><!-- /.container-fluid -->
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+
+    <!-- Main Footer -->
+    <footer th:replace="admin/fragments/footer :: footer"></footer>
+</div>
+<!-- ./wrapper -->
+
+<!-- REQUIRED SCRIPTS -->
+
+<div th:replace="admin/fragments/script :: script"></div>
+<script th:src="@{/admin/dist/js/project.js}">
+</script>
+</body>
+
+</html>

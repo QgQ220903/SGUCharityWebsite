@@ -9,9 +9,10 @@ import java.util.List;
 
 public interface ProjectService {
 
-    void createProject(ProjectDto projectDto, Long categoryId);
+    void createProject(ProjectDto projectDto);
     List<ProjectDto> findAllProjects();
-    void updateProject(ProjectDto projectDto, Long categoryId);
+    void updateProject(ProjectDto projectDto);
     ProjectDto findProjectById(long projectId);
     void deleteProjectById(long categoryId);
+    Project saveProject(ProjectDto projectDto);
 }

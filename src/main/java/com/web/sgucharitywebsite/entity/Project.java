@@ -9,7 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
-
+import java.time.LocalDate;
 @Data
 @Builder
 @NoArgsConstructor
@@ -21,11 +21,11 @@ public class Project {
     private Long id;
     private String name;
     private String content;
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
+    private LocalDate startTime;
+    private LocalDate endTime;
     private double targetAmount;
     private double currentAmount;
-    private String status;
+    private String status = "Chờ duyệt";
     @CreationTimestamp
     private LocalDateTime createOn;
     @UpdateTimestamp
@@ -34,6 +34,5 @@ public class Project {
     @ManyToOne
     @JoinColumn(name="category_id", nullable = false)
     private Category category;
-
 
 }

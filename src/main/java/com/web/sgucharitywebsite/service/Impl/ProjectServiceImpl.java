@@ -1,5 +1,6 @@
 package com.web.sgucharitywebsite.service.Impl;
 
+import com.web.sgucharitywebsite.dto.CategoryDto;
 import com.web.sgucharitywebsite.dto.ProjectDto;
 import com.web.sgucharitywebsite.entity.Category;
 import com.web.sgucharitywebsite.entity.Project;
@@ -23,8 +24,12 @@ public class ProjectServiceImpl implements ProjectService {
         this.projectRepository = projectRepository;
     }
     @Override
-    public void createProject(ProjectDto projectDto, Long categoryId) {
-        Category category = categoryRepository.findById(categoryId).get();
+    public Project saveProject(ProjectDto projectDto) {
+        return projectRepository.save(mapToProject(projectDto));
+    }
+    @Override
+    public void createProject(ProjectDto projectDto) {
+        Category category = categoryRepository.findById(projectDto.getCategoryId()).get();
         Project project = mapToProject(projectDto);
         project.setCategory(category);
         projectRepository.save(project);
@@ -37,18 +42,22 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public void updateProject(ProjectDto projectDto, Long categoryId) {
-
+    public void updateProject(ProjectDto projectDto) {
+        Category category = categoryRepository.findById(projectDto.getCategoryId()).get();
+        Project project = mapToProject(projectDto);
+        project.setCategory(category);
+        projectRepository.save(project);
     }
 
     @Override
     public ProjectDto findProjectById(long projectId) {
-        return null;
+        Project project = projectRepository.findById(projectId).get();
+        return mapToProjectDto(project);
     }
 
     @Override
-    public void deleteProjectById(long categoryId) {
-
+    public void deleteProjectById(long projectId) {
+        projectRepository.deleteById(projectId);
     }
 
     private Project mapToProject(ProjectDto projectDto) {
@@ -78,6 +87,7 @@ public class ProjectServiceImpl implements ProjectService {
                 .status(project.getStatus())
                 .createOn(project.getCreateOn())
                 .updateOn(project.getUpdateOn())
+                .categoryId(project.getCategory().getId())
                 .build();
     }
 }
