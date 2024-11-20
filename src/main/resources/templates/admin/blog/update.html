@@ -18,7 +18,7 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0">Cập Nhật Dự Án</h1>
+                        <h1 class="m-0">Cập Nhật Bài Viết</h1>
                     </div><!-- /.col -->
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
@@ -42,12 +42,12 @@
                         <!-- general form elements -->
                         <div class="card card-primary">
                             <div class="card-header">
-                                <h3 class="card-title">Cập nhật dự án</h3>
+                                <h3 class="card-title">Cập nhật bài viết</h3>
                             </div>
                             <!-- /.card-header -->
                             <!-- form start -->
-                            <form role="form" method="post" th:action="@{/admin/project/update/{id}(id=${project.id})}"
-                                  th:object="${project}">
+                            <form role="form" method="post" th:action="@{/admin/blog/update/{id}(id=${blog.id})}"
+                                  th:object="${blog}">
                                 <div class="card-body">
                                     <div class="form-group">
                                         <input type="hidden" class="form-control" th:field="*{id}">
@@ -59,32 +59,6 @@
                                             <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}">
                                             </option>
                                         </select>
-                                        <label for="targetAmount">Mục tiêu dự án</label>
-                                        <input type="text" class="form-control" id="targetAmount" th:value="${formattedTargetAmount}" name="targetAmount">
-                                        <span th:if="${#fields.hasErrors('targetAmount')}" class="text-danger" th:errors="*{targetAmount}"></span>
-                                        <label for="currentAmount">Đã đạt được</label>
-                                        <input type="text" class="form-control" id="currentAmount" th:value="${project.formattedCurrentAmount}" name="currentAmount" disabled>
-                                        <input type="hidden" th:field="*{currentAmount}">
-                                        <span th:if="${#fields.hasErrors('currentAmount')}" class="text-danger" th:errors="*{currentAmount}"></span>
-                                        <label>Ngày bắt đầu</label>
-                                        <div class="input-group date" id="startDate" data-target-input="nearest">
-                                            <input type="text" class="form-control datetimepicker-input"
-                                                   data-target="#startDate" th:field="*{startTime}" disabled>
-                                            <input type="hidden" th:field="*{startTime}">
-                                            <div class="input-group-append" data-target="#startDate"
-                                                 data-toggle="datetimepicker">
-                                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                            </div>
-                                        </div>
-                                        <label>Ngày kết thúc:</label>
-                                        <div class="input-group date" id="endDate" data-target-input="nearest">
-                                            <input type="text" class="form-control datetimepicker-input"
-                                                   data-target="#endDate" th:field="*{endTime}">
-                                            <div class="input-group-append" data-target="#endDate"
-                                                 data-toggle="datetimepicker">
-                                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                            </div>
-                                        </div>
                                         <input type="hidden" class="form-control" th:field="*{createOn}">
                                     </div>
                                     <div class="form-group">
@@ -111,7 +85,7 @@
                                 </div>
                                 <div class="card-footer">
                                     <button type="submit" class="btn btn-primary">Sửa</button>
-                                    <a href="/admin/project" class="btn btn-danger">Hủy</a>
+                                    <a href="/admin/blog" class="btn btn-danger">Hủy</a>
                                 </div>
                             </form>
                         </div>

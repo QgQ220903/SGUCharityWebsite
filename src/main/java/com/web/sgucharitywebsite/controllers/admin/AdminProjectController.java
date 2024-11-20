@@ -82,6 +82,7 @@ public class AdminProjectController {
             result.getAllErrors().forEach(error -> System.out.println(error.getDefaultMessage()));
             return "admin/project/update";
         }
+
         projectDto.setId(projectId);
         projectService.updateProject(projectDto);
         return "redirect:/admin/project";
