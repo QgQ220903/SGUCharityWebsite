@@ -34,6 +34,9 @@
             <!-- Main content -->
             <section class="content">
                 <div class="container-fluid">
+                    <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+                        Đăng ký tài khoản thành công. Bạn có thể <a href="/login">Đăng Nhập</a>
+                    </div>
                     <!-- Main row -->
                     <div class="row">
                         <div class="col-12">
@@ -45,27 +48,25 @@
                                     <h3 class="card-title">Danh Sách Dự Án</h3>
                                 </div>
                                 <!-- /.card-header -->
-                                <div class="card-body" id="projectDataTableWrapper">
-                                    <table id="projectDataTable" class="table table-bordered table-hover">
+                                <div class="card-body" id="userDataTableWrapper">
+                                    <table id="userDataTable" class="table table-bordered table-hover">
                                         <thead>
                                             <tr>
                                                 <th>ID</th>
-                                                <th>Username</th>
-                                                <th>Password</th>
-                                                <th>Fullname</th>
-                                                <th>Phone</th>
+                                                <th>Họ và tên</th>
                                                 <th>Email</th>
+                                                <th>Phone</th>
+                                                <th>Nhóm quyền</th>
                                                 <th>Thao Tác </th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>QuachQuy</td>
-                                                <td>123456</td>
-                                                <td>Quách Gia Quy</td>
-                                                <td>0909111222</td>
-                                                <td>quyquach@gmail.com</td>
+                                            <tr th:each="appUser : ${appUsers}">
+                                                <td th:text="${appUser.id}"></td>
+                                                <td th:text="${appUser.fullName}"></td>
+                                                <td th:text="${appUser.email}"></td>
+                                                <td th:text="${appUser.phone}"></td>
+                                                <td th:text="${appUser.role}"></td>
                                                 <td>
                                                     <button class="btn btn-warning">
                                                         <i class="bi bi-pencil-square"></i>
@@ -98,7 +99,7 @@
     <!-- REQUIRED SCRIPTS -->
 
     <div th:replace="admin/fragments/script :: script"></div>
-    <script th:src="@{/admin/dist/js/project.js}"></script>
+    <script th:src="@{/admin/dist/js/user.js}"></script>
 
 </body>
 

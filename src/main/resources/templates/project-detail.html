@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+
+<head th:replace="user/fragments/head :: head"></head>
+
+<body>
+  <!-- Navigation-->
+  <nav th:replace="user/fragments/nav :: nav"></nav>
+  <!-- hero -->
+  <div class="container mt-5">
+    <div class="row">
+      <div class="col-lg-8 mx-auto mb-4">
+        <!-- Post content-->
+        <article>
+          <!-- Post header-->
+          <header class="mb-4">
+            <!-- Post title-->
+            <h1 class="fw-bolder mb-1">Hỗ trợ sinh viên khởi nghiệp</h1>
+            <!-- Post meta content-->
+            <div class="text-muted fst-italic mb-2">Đăng bởi: Quách Gia Quy - Ngày đăng: 20/11/2024</div>
+            <!-- Post categories-->
+          </header>
+          <!-- Preview image figure-->
+          <img class="img-fluid rounded mx-auto mb-4"
+            src="https://sgu.edu.vn/wp-content/uploads/2020/07/MHX_2020_05-1024x683.jpg" alt="...">
+          <!-- Post content-->
+          <section class="mb-5">
+            <p>
+              "Dự án hướng đến việc giải quyết các vấn đề xã hội thông qua các giải pháp sáng tạo của sinh viên. Chúng
+              tôi sẽ hỗ trợ các dự án khởi nghiệp có tác động tích cực đến cộng đồng, như các dự án về giáo dục, y tế,
+              môi trường. Các hình thức hỗ trợ bao gồm cung cấp không gian làm việc chung, kết nối với các chuyên gia
+              trong lĩnh vực, tổ chức các cuộc thi ý tưởng khởi nghiệp và hỗ trợ pháp lý.
+            </p>
+          </section>
+        </article>
+      </div>
+      <div class="col-lg-4">
+        <!-- Categories widget-->
+        <div class="card mb-4">
+          <div class="card-header">Quyên Góp</div>
+          <div class="card-body">
+            <div class="row">
+              <p class="">
+                Số tiền cần đạt được: <br> <span class="fw-bold">2.481.012đ / 200.000.000đ</span>
+              </p>
+              <p class="">
+                Lượt quyên góp: 0
+              </p>
+              <p class="">
+                Thời hạn còn: 20 ngày
+              </p>
+              <div class="col-12">
+                <button class="btn btn-primary w-100">Quyên Góp</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Side widget-->
+        <div class="card mb-4">
+          <div class="card-header">Side Widget</div>
+          <div class="card-body">You can put anything you want inside of these side widgets. They are easy to use, and
+            feature the Bootstrap 5 card component!</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <footer th:replace="user/fragments/footer :: footer"></footer>
+  <div th:replace="user/fragments/scripts :: scripts"></div>
+
+</body>
+
+</html>

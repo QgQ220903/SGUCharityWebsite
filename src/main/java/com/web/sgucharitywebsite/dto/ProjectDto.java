@@ -22,7 +22,6 @@ public class ProjectDto {
     private String content;
     @DateTimeFormat(pattern = "MM/dd/yyyy")
     private LocalDate startTime;
-
     @DateTimeFormat(pattern = "MM/dd/yyyy")
     private LocalDate endTime;
     private double targetAmount;

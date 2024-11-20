@@ -49,7 +49,6 @@ public class AdminCategoryController {
             model.addAttribute("category", categoryDto);
             return "admin/category/create";
         }
-
         categoryService.saveCategory(categoryDto);
         redirectAttributes.addFlashAttribute("success", "Category created successfully!");
         return "redirect:/admin/category";
