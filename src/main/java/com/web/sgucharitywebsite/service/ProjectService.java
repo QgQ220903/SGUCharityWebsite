@@ -13,6 +13,6 @@ public interface ProjectService {
     List<ProjectDto> findAllProjects();
     void updateProject(ProjectDto projectDto);
     ProjectDto findProjectById(long projectId);
-    void deleteProjectById(long categoryId);
+    void deleteProjectById(long projectId);
     Project saveProject(ProjectDto projectDto);
 }

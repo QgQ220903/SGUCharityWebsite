@@ -33,10 +33,6 @@ public class AdminProjectController {
         this.projectService = projectService;
     }
 
-//    @RequestMapping("/project")
-//    public String index() {
-//        return "admin/project/index";
-//    }
     @RequestMapping("/project")
     public String adminProject(Model model) {
         List<ProjectDto> projectDtoList = projectService.findAllProjects();
@@ -86,6 +82,7 @@ public class AdminProjectController {
             result.getAllErrors().forEach(error -> System.out.println(error.getDefaultMessage()));
             return "admin/project/update";
         }
+
         projectDto.setId(projectId);
         projectService.updateProject(projectDto);
         return "redirect:/admin/project";

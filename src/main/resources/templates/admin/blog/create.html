@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:replace="admin/fragments/head :: head"></head>
+
+<body class="hold-transition sidebar-mini">
+
+<div class="wrapper">
+
+    <nav th:replace="admin/fragments/nav :: nav"></nav>
+
+    <aside th:replace="admin/fragments/aside :: aside"></aside>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0">Thêm mới bài viết</h1>
+                    </div><!-- /.col -->
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a th:href="@{/admin/home}">Trang Chủ</a></li>
+                            <li class="breadcrumb-item"><a th:href="@{/admin/blog}">Quản Lý Bài Viết</a></li>
+                            <li class="breadcrumb-item active">Thêm mới bài viết</li>
+                        </ol>
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </div>
+        <!-- /.content-header -->
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <!-- Main row -->
+                <div class="row">
+                    <div class="col-12">
+                        <!-- general form elements -->
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">Thêm bài viết</h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <!-- form start -->
+                            <form role="form" method="post" th:action="@{/admin/blog/create}" th:object="${blog}" >
+                                <div class="card-body row">
+                                    <div class="form-group col-lg-6">
+                                        <label>Tiêu đề</label>
+                                        <input type="text" class="form-control" id="name" th:field="*{name}"
+                                               name="name">
+                                    </div>
+                                    <div class="form-group col-lg-6">
+                                        <label>Danh mục</label>
+                                        <select class="form-control" th:field="*{categoryId}">
+                                            <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}">
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-lg-6">
+                                        <label>Trạng Thái</label>
+                                        <select class="form-control" th:field="*{status}">
+                                            <option th:value="'Chờ duyệt'" th:text="'Chờ duyệt'"></option>
+                                            <option th:value="'Đã duyệt'" th:text="'Đã duyệt'"></option>
+                                            <option th:value="'Từ chối'" th:text="'Từ chối'"></option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-12">
+                                        <div class="card card-outline card-info">
+                                            <div class="card-header">
+                                                <h3 class="card-title">
+                                                    Nội dung
+                                                </h3>
+                                            </div>
+                                            <!-- /.card-header -->
+                                            <div class="card-body">
+                                                <textarea id="summernote" th:field="*{content}"></textarea>
+                                            </div>
+                                            <div class="card-footer">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /.col-->
+                                </div>
+                                <!-- /.card-body -->
+
+                                <div class="card-footer">
+                                    <button type="submit" class="btn btn-primary">Thêm</button>
+                                    <a href="/admin/blog" type="submit" class="btn btn-danger">Hủy</a>
+                                </div>
+                            </form>
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                </div>
+                <!-- /.row (main row) -->
+            </div><!-- /.container-fluid -->
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+    <!-- Main Footer -->
+    <footer th:replace="admin/fragments/footer :: footer"></footer>
+</div>
+<!-- ./wrapper -->
+
+<!-- REQUIRED SCRIPTS -->
+
+<div th:replace="admin/fragments/script :: script"></div>
+
+<!-- date-range-picker -->
+<script th:src="@{/admin/dist/js/project.js}">
+</script>
+</body>
+
+</html>
