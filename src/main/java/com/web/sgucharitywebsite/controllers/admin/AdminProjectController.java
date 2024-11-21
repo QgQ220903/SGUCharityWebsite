@@ -2,22 +2,24 @@ package com.web.sgucharitywebsite.controllers.admin;
 
 import com.web.sgucharitywebsite.dto.CategoryDto;
 import com.web.sgucharitywebsite.dto.ProjectDto;
-import com.web.sgucharitywebsite.entity.Category;
-import com.web.sgucharitywebsite.entity.Project;
-import com.web.sgucharitywebsite.helper.CurrencyFormatter;
 import com.web.sgucharitywebsite.service.CategoryService;
 import com.web.sgucharitywebsite.service.ProjectService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import com.web.sgucharitywebsite.helper.ImgStorage;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.*;
 import java.text.DecimalFormat;
+import java.util.Date;
 import java.util.List;
 
 
@@ -50,17 +52,31 @@ public class AdminProjectController {
     }
 
     @PostMapping("/project/create")
-    public String saveProject(@Valid @ModelAttribute("project") ProjectDto projectDto, BindingResult result,
-                               Model model, RedirectAttributes redirectAttributes) {
+    public String saveProject(@Valid @ModelAttribute("project") ProjectDto projectDto,
+                              BindingResult result, Model model,
+                              RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             model.addAttribute("project", projectDto);
             return "admin/project/create";
         }
 
-        projectService.createProject(projectDto);
+        // Xử lý ảnh tải lên
+        MultipartFile image = projectDto.getThumbnailFile();
+        if (image != null && !image.isEmpty()) {
+            try {
+                String imagePath = ImgStorage.saveImg(image); // Lưu ảnh và lấy đường dẫn
+                projectDto.setThumbnail(imagePath); // Cập nhật đường dẫn vào DTO
+            } catch (IOException ex) {
+                model.addAttribute("error", "Failed to upload the file.");
+                return "admin/project/create";
+            }
+        }
+
+        projectService.createProject(projectDto); // Lưu dự án vào DB
         redirectAttributes.addFlashAttribute("success", "Project created successfully!");
         return "redirect:/admin/project";
     }
+
 
     @GetMapping("/project/update/{projectId}")
     public String updateProject(@PathVariable("projectId") long projectId, Model model) {
@@ -76,13 +92,30 @@ public class AdminProjectController {
 
     @PostMapping("/project/update/{projectId}")
     public String updateProject(@PathVariable("projectId") long projectId,
-                                 @Valid @ModelAttribute("project") ProjectDto projectDto,
-                                 BindingResult result) {
+                                @Valid @ModelAttribute("project") ProjectDto projectDto,
+                                BindingResult result, Model model) {
         if (result.hasErrors()) {
-            result.getAllErrors().forEach(error -> System.out.println(error.getDefaultMessage()));
+            model.addAttribute("project", projectDto);
             return "admin/project/update";
         }
 
+        // Xử lý ảnh mới nếu được tải lên
+        MultipartFile image = projectDto.getThumbnailFile();
+        if (image != null && !image.isEmpty()) {
+            try {
+                String imagePath = ImgStorage.saveImg(image); // Lưu ảnh và lấy đường dẫn
+                projectDto.setThumbnail(imagePath); // Cập nhật đường dẫn mới
+            } catch (IOException ex) {
+                model.addAttribute("error", "Failed to upload the file.");
+                return "admin/project/update";
+            }
+        } else {
+            // Nếu không tải ảnh mới, giữ nguyên đường dẫn ảnh cũ
+            ProjectDto existingProject = projectService.findProjectById(projectId);
+            projectDto.setThumbnail(existingProject.getThumbnail());
+        }
+
+        // Cập nhật dự án vào DB
         projectDto.setId(projectId);
         projectService.updateProject(projectDto);
         return "redirect:/admin/project";

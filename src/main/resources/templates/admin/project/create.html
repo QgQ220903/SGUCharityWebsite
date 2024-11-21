@@ -45,7 +45,7 @@
                                 </div>
                                 <!-- /.card-header -->
                                 <!-- form start -->
-                                <form role="form" method="post" th:action="@{/admin/project/create}" th:object="${project}" >
+                                <form role="form" method="post" th:action="@{/admin/project/create}" th:object="${project}" enctype="multipart/form-data" >
                                     <div class="card-body row">
                                         <div class="form-group col-lg-6">
                                             <label>Tên dự án</label>
@@ -107,6 +107,10 @@
                                                 <div class="card-footer">
                                                 </div>
                                             </div>
+                                        </div>
+                                        <div class="form-group col-lg-6">
+                                            <label for="thumbnailFile">Hình ảnh</label>
+                                            <input type="file" id="thumbnailFile" name="thumbnailFile" accept="image/*"/>
                                         </div>
                                         <!-- /.col-->
                                     </div>

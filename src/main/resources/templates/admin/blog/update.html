@@ -47,7 +47,7 @@
                             <!-- /.card-header -->
                             <!-- form start -->
                             <form role="form" method="post" th:action="@{/admin/blog/update/{id}(id=${blog.id})}"
-                                  th:object="${blog}">
+                                  th:object="${blog}" enctype="multipart/form-data">
                                 <div class="card-body">
                                     <div class="form-group">
                                         <input type="hidden" class="form-control" th:field="*{id}">
@@ -81,6 +81,13 @@
                                             <option th:value="'Đã duyệt'" th:text="'Đã duyệt'"></option>
                                             <option th:value="'Từ chối'" th:text="'Từ chối'"></option>
                                         </select>
+                                        <div class="form-group col-lg-6">
+                                            <label for="thumbnailFile">Hình ảnh</label>
+                                            <img th:src="${blog.thumbnail}" alt="Thumbnail của dự án"
+                                                 style="max-width: 300px; max-height: 300px;">
+                                            <input type="file" id="thumbnailFile" name="thumbnailFile" accept="image/*"/>
+                                            <input type="hidden" name="thumbnail" th:value="${blog.thumbnail}">
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="card-footer">

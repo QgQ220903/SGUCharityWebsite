@@ -25,7 +25,7 @@ public class Blog {
     private String name;
     @Column(columnDefinition = "TEXT")
     private String content;
-
+    private String thumbnail;
     private String status = "Chờ duyệt";
     @CreationTimestamp
     private LocalDateTime createOn;

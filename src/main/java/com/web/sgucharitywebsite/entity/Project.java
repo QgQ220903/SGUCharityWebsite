@@ -20,7 +20,9 @@ public class Project {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    @Lob
     private String content;
+    private String thumbnail;
     private LocalDate startTime;
     private LocalDate endTime;
     private double targetAmount;

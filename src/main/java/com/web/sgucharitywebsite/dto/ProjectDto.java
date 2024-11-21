@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.time.LocalDateTime;
 import java.time.LocalDate;
 @Data
@@ -20,6 +22,7 @@ public class ProjectDto {
     private Long id;
     private String name;
     private String content;
+    private String thumbnail;
     @DateTimeFormat(pattern = "MM/dd/yyyy")
     private LocalDate startTime;
     @DateTimeFormat(pattern = "MM/dd/yyyy")
@@ -30,7 +33,7 @@ public class ProjectDto {
     private LocalDateTime createOn;
     private LocalDateTime updateOn;
     private Long categoryId;
-
+    private MultipartFile thumbnailFile;
     public Long getCategoryId() {
         return categoryId;
     }
