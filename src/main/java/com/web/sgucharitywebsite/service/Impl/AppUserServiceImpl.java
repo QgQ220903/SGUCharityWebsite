@@ -42,36 +42,33 @@ public class AppUserServiceImpl implements UserDetailsService, AppUserService {
   @Override
   public List<RegistrationDto> findAllAppUser() {
     List<AppUser> appUsers = appUserRepository.findAll();
-    return appUsers.stream().map((appUser) -> mappToRegistrationDto(appUser)).collect(Collectors.toList());
+    return appUsers.stream().map((appUser) -> mapToRegistrationDto(appUser)).collect(Collectors.toList());
   }
 
   @Override
-  public RegistrationDto saveAppUser(RegistrationDto registrationDto) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'saveAppUser'");
+  public void saveAppUser(RegistrationDto registrationDto) {
+    appUserRepository.save(mapToAppUser(registrationDto));
   }
 
   @Override
   public void updateAppUser(RegistrationDto registrationDto) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'updateAppUser'");
+    AppUser appUser = mapToAppUser(registrationDto);
+    appUserRepository.save(appUser);
+
   }
 
   @Override
   public RegistrationDto findAppUserById(long appUserId) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'findAppUserById'");
+    return mapToRegistrationDto(appUserRepository.findById(appUserId).get());
   }
 
   @Override
   public void deleteAppUserById(long appUserId) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'deleteAppUserById'");
+    appUserRepository.deleteById(appUserId);
   }
 
   private AppUser mapToAppUser(RegistrationDto registrationDto) {
-    return AppUser.builder()
-        .id(registrationDto.getId())
+    AppUser appUser = AppUser.builder()
         .fullName(registrationDto.getFullName())
         .email(registrationDto.getEmail())
         .phone(registrationDto.getPhone())
@@ -80,9 +77,15 @@ public class AppUserServiceImpl implements UserDetailsService, AppUserService {
         .createOn(registrationDto.getCreateOn())
         .updateOn(registrationDto.getUpdateOn())
         .build();
+    // Kiểm tra nếu ID không null, thì gán ID cho AppUser
+    if (registrationDto.getId() != null) {
+      appUser.setId(registrationDto.getId());
+    }
+
+    return appUser;
   }
 
-  private RegistrationDto mappToRegistrationDto(AppUser appUser) {
+  private RegistrationDto mapToRegistrationDto(AppUser appUser) {
     return RegistrationDto.builder()
         .id(appUser.getId())
         .fullName(appUser.getFullName())

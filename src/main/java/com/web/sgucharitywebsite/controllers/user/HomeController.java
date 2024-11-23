@@ -14,13 +14,14 @@ import java.security.Principal;
 public class HomeController {
     @Autowired
     private AppUserRepository appUserRepository;
+
     @GetMapping({ "/", "/home" })
     public String home(Model model, Principal principal) {
-        if(principal != null) {
+        if (principal != null) {
             String email = principal.getName();
             AppUser appUser = appUserRepository.findByEmail(email);
             model.addAttribute("user", appUser);
         }
-        return "user/home/index";
+        return "homepage";
     }
 }

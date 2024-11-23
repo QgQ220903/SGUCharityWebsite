@@ -17,7 +17,7 @@ import com.web.sgucharitywebsite.repository.AppUserRepository;
 public interface AppUserService {
   List<RegistrationDto> findAllAppUser();
 
-  RegistrationDto saveAppUser(RegistrationDto registrationDto);
+  void saveAppUser(RegistrationDto registrationDto);
 
   void updateAppUser(RegistrationDto registrationDto);
 

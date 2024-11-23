@@ -8,14 +8,26 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.web.sgucharitywebsite.dto.CategoryDto;
+import com.web.sgucharitywebsite.dto.ProjectDto;
 import com.web.sgucharitywebsite.entity.AppUser;
+import com.web.sgucharitywebsite.entity.Project;
 import com.web.sgucharitywebsite.repository.AppUserRepository;
+import com.web.sgucharitywebsite.service.CategoryService;
+import com.web.sgucharitywebsite.service.ProjectService;
+
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 public class ProjectController {
-    @Autowired
     private AppUserRepository appUserRepository;
+    private ProjectService projectService;
+
+    @Autowired
+    public ProjectController(AppUserRepository appUserRepository, ProjectService projectService) {
+        this.projectService = projectService;
+        this.appUserRepository = appUserRepository;
+    }
 
     @GetMapping("/project")
     public String home(Model model, Principal principal) {
@@ -24,6 +36,8 @@ public class ProjectController {
             AppUser appUser = appUserRepository.findByEmail(email);
             model.addAttribute("user", appUser);
         }
+        List<ProjectDto> projectDtoList = projectService.findAllProjects();
+        model.addAttribute("projects", projectDtoList);
         return "project-list";
     }
 
@@ -44,6 +58,8 @@ public class ProjectController {
             AppUser appUser = appUserRepository.findByEmail(email);
             model.addAttribute("user", appUser);
         }
+        ProjectDto projectDto = projectService.findProjectById(projectId);
+        model.addAttribute("project", projectDto);
         return "project-detail";
     }
 

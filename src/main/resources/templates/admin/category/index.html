@@ -52,7 +52,7 @@
                                             <tr>
                                                 <th>ID</th>
                                                 <th>Danh Mục</th>
-                                                <th>Mô Tả</th>
+                                                <!-- <th>Mô Tả</th> -->
                                                 <th>Thao Tác</th>
                                             </tr>
                                         </thead>
@@ -60,19 +60,19 @@
                                             <tr th:each="category : ${categories}">
                                                 <td th:text="${category.id}"></td>
                                                 <td th:text="${category.name}"></td>
-                                                <td th:text="${category.description}"></td>
+                                                <!-- <td th:text="${category.description}"></td> -->
                                                 <td>
                                                     <a th:href="@{/admin/category/update/{id}(id=${category.id})}"
                                                         class="btn btn-warning">
-                                                        <i class="bi bi-pencil-square"></i> Sửa
+                                                        <i class="bi bi-pencil-square"></i>
                                                     </a>
                                                     <a th:href="@{/admin/category/delete/{id}(id=${category.id})}"
                                                         class="btn btn-danger btn-delete">
-                                                        <i class="bi bi-trash-fill"></i> Xóa
+                                                        <i class="bi bi-trash-fill"></i>
                                                     </a>
                                                     <a th:href="@{/admin/category/detail/{id}(id=${category.id})}"
                                                         class="btn btn-primary">
-                                                        <i class="bi bi-eye"></i> Chi Tiết
+                                                        <i class="bi bi-eye"></i>
                                                     </a>
                                                 </td>
                                         </tbody>

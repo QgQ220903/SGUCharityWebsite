@@ -13,6 +13,7 @@ import org.springframework.validation.FieldError;
 import com.web.sgucharitywebsite.dto.RegistrationDto;
 import com.web.sgucharitywebsite.entity.AppUser;
 import com.web.sgucharitywebsite.repository.AppUserRepository;
+import com.web.sgucharitywebsite.service.AppUserService;
 
 import jakarta.validation.Valid;
 
@@ -25,7 +26,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 @Controller
 public class AccountController {
   @Autowired
-  private AppUserRepository appUserRepository;
+  private AppUserService appUserService;
 
   @GetMapping("/register")
   public String register(Model model) {
@@ -43,7 +44,7 @@ public class AccountController {
     if (!registrationDto.getPassword().equals(registrationDto.getConfirmPassword())) {
       result.addError(new FieldError("registrationDto", "confirmPassword", "Mật khẩu không khớp"));
     }
-    AppUser appUser = appUserRepository.findByEmail(registrationDto.getEmail());
+    AppUser appUser = appUserService.findAppUserByEmail(registrationDto.getEmail());
     if (appUser != null) {
       result.addError(new FieldError("registrationDto", "email", "Email đã có người sử dụng"));
     }
@@ -52,20 +53,19 @@ public class AccountController {
     }
     try {
       var bcryptEncoder = new BCryptPasswordEncoder();
-      AppUser newUser = new AppUser();
+      RegistrationDto newUser = new RegistrationDto();
       newUser.setFullName(registrationDto.getFullName());
       newUser.setEmail(registrationDto.getEmail());
       newUser.setPhone(registrationDto.getPhone());
       newUser.setRole("USER");
       newUser.setCreateOn(registrationDto.getCreateOn());
       newUser.setPassword(bcryptEncoder.encode(registrationDto.getPassword()));
-      appUserRepository.save(newUser);
+      appUserService.saveAppUser(newUser);
       model.addAttribute("registrationDto", new RegistrationDto());
       model.addAttribute("success", true);
     } catch (Exception e) {
       result.addError(new FieldError("registrationDto", "fullName", e.getMessage()));
     }
-
     return "auth/register";
   }
 

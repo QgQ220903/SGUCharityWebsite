@@ -48,23 +48,35 @@
                                 <form role="form" method="post" th:action="@{/admin/user/create}"
                                     th:object="${registrationDto}">
                                     <div class="card-body row">
-                                        <div class="form-group col-lg-6">
+                                        <div class="form-group col-12">
                                             <label>Họ và tên</label>
                                             <input type="text" class="form-control" th:field="*{fullName}">
+                                            <p th:if="${#fields.hasErrors('fullName')}" th:errorClass="text-danger"
+                                                th:errors="*{fullName}">
+                                            </p>
                                         </div>
-                                        <div class="form-group col-lg-6">
+                                        <div class="form-group col-12">
                                             <label>Email</label>
                                             <input type="text" class="form-control" th:field="*{email}">
+                                            <p th:if="${#fields.hasErrors('email')}" th:errorClass="text-danger"
+                                                th:errors="*{email}">
+                                            </p>
                                         </div>
-                                        <div class="form-group col-lg-6">
+                                        <div class="form-group col-12">
                                             <label>Mật khẩu</label>
                                             <input type="text" class="form-control" th:field="*{password}">
+                                            <p th:if="${#fields.hasErrors('password')}" th:errorClass="text-danger"
+                                                th:errors="*{password}">
+                                            </p>
                                         </div>
-                                        <div class="form-group col-lg-6">
+                                        <div class="form-group col-12">
                                             <label>Số Điện Thoại</label>
                                             <input type="tel" class="form-control" th:field="*{phone}">
+                                            <p th:if="${#fields.hasErrors('phone')}" th:errorClass="text-danger"
+                                                th:errors="*{phone}">
+                                            </p>
                                         </div>
-                                        <div class="form-group col-lg-6">
+                                        <div class="form-group col-12">
                                             <label>Nhóm Quyền</label>
                                             <select class="form-control" th:field="*{role}">
                                                 <option th:value="'ADMIN'" th:text="'ADMIN'"></option>

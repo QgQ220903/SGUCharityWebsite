@@ -1,5 +1,5 @@
 $(function () {
-  $("#userDataTable")
+  $("#blogDataTable")
     .DataTable({
       paging: true,
       lengthChange: true,
@@ -35,5 +35,5 @@ $(function () {
     })
     .buttons()
     .container()
-    .appendTo("#userDataTableWrapper .col-md-6:eq(0)");
+    .appendTo("#blogDataTableWrapper .col-md-6:eq(0)");
 });

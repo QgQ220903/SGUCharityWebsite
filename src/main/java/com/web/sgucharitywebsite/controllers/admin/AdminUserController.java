@@ -10,19 +10,14 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.web.sgucharitywebsite.dto.CategoryDto;
-import com.web.sgucharitywebsite.dto.ProjectDto;
 import com.web.sgucharitywebsite.dto.RegistrationDto;
 import com.web.sgucharitywebsite.entity.AppUser;
-import com.web.sgucharitywebsite.entity.Category;
-import com.web.sgucharitywebsite.repository.AppUserRepository;
 import com.web.sgucharitywebsite.service.AppUserService;
-
 import jakarta.validation.Valid;
-
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 @RequestMapping("/admin")
@@ -64,12 +59,45 @@ public class AdminUserController {
       var bcryptEncoder = new BCryptPasswordEncoder();
       registrationDto.setPassword(bcryptEncoder.encode(registrationDto.getPassword()));
       appUserService.saveAppUser(registrationDto);
-      model.addAttribute("registrationDto", new RegistrationDto());
       model.addAttribute("success", true);
+      return "redirect:/admin/user"; // Redirect to success page
     } catch (Exception e) {
       result.addError(new FieldError("registrationDto", "fullName", e.getMessage()));
+      return "admin/user/create"; // Return to create page with error
     }
-    return "admin/user/index";
+  }
+
+  @GetMapping("/user/delete/{userId}")
+  public String delete(@PathVariable("userId") long userId, Model model) {
+    appUserService.deleteAppUserById(userId);
+    model.addAttribute("message", "Xóa người dùng thành công!");
+    return "redirect:/admin/user";
+  }
+
+  @GetMapping("/user/update/{userId}")
+  public String update(@PathVariable("userId") long userId, Model model) {
+    RegistrationDto registrationDto = appUserService.findAppUserById(userId);
+    model.addAttribute("registrationDto", registrationDto);
+    return "admin/user/update";
+  }
+
+  @PostMapping("/user/update/{userId}")
+  public String update(@PathVariable("userId") long userId,
+      @Valid @ModelAttribute("registrationDto") RegistrationDto registrationDto,
+      BindingResult result) {
+    if (result.hasErrors()) {
+      return "admin/user/update";
+    }
+    // Kiểm tra trùng lặp email
+    AppUser existingUser = appUserService.findAppUserByEmail(registrationDto.getEmail());
+    if (existingUser != null && existingUser.getId() != userId) {
+      result.addError(new FieldError("registrationDto", "email", "Email đã tồn tại"));
+      return "admin/user/update";
+    }
+    registrationDto.setId(userId);
+    
+    appUserService.updateAppUser(registrationDto);
+    return "redirect:/admin/user";
   }
 
 }
