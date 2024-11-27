@@ -2,16 +2,13 @@ package com.web.sgucharitywebsite.entity;
 
 import java.sql.Date;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
+import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -37,4 +34,6 @@ public class AppUser {
   private LocalDateTime createOn;
   @UpdateTimestamp
   private LocalDateTime updateOn;
+  @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+  private Set<Project> projects = new HashSet<>();
 }

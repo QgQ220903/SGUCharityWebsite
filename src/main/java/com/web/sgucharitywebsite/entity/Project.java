@@ -34,9 +34,11 @@ public class Project {
     private LocalDateTime createOn;
     @UpdateTimestamp
     private LocalDateTime updateOn;
-
     @ManyToOne
     @JoinColumn(name="category_id", nullable = false)
     private Category category;
+    @ManyToOne
+    @JoinColumn(name="user_id", nullable = false)
+    private AppUser user;
 
 }
