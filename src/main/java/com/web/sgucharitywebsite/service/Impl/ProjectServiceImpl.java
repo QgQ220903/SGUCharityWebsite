@@ -4,29 +4,36 @@ import com.web.sgucharitywebsite.dto.CategoryDto;
 import com.web.sgucharitywebsite.dto.ProjectDto;
 import com.web.sgucharitywebsite.entity.Category;
 import com.web.sgucharitywebsite.entity.Project;
+import com.web.sgucharitywebsite.repository.AppUserRepository;
 import com.web.sgucharitywebsite.repository.CategoryRepository;
 import com.web.sgucharitywebsite.repository.ProjectRepository;
 import com.web.sgucharitywebsite.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class ProjectServiceImpl implements ProjectService {
     private CategoryRepository categoryRepository;
+    private AppUserRepository appUserRepository;
     private ProjectRepository projectRepository;
 
     @Autowired
-    public ProjectServiceImpl(CategoryRepository categoryRepository, ProjectRepository projectRepository) {
+    public ProjectServiceImpl(CategoryRepository categoryRepository, AppUserRepository appUserRepository,
+            ProjectRepository projectRepository) {
         this.categoryRepository = categoryRepository;
+        this.appUserRepository = appUserRepository;
         this.projectRepository = projectRepository;
+
     }
+
     @Override
     public Project saveProject(ProjectDto projectDto) {
+
         return projectRepository.save(mapToProject(projectDto));
     }
+
     @Override
     public void createProject(ProjectDto projectDto) {
         Category category = categoryRepository.findById(projectDto.getCategoryId()).get();

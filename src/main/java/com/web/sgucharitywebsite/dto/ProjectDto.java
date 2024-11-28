@@ -33,6 +33,8 @@ public class ProjectDto {
     private LocalDateTime createOn;
     private LocalDateTime updateOn;
     private Long categoryId;
+    private CategoryDto category; // Include a nested CategoryDto for simplified data transfer
+    private RegistrationDto user;        // Include a nested AppUserDto for user information
     private MultipartFile thumbnailFile;
     public Long getCategoryId() {
         return categoryId;

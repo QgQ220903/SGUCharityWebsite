@@ -5,8 +5,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.web.sgucharitywebsite.config.VNPAYService;
 import com.web.sgucharitywebsite.dto.CategoryDto;
 import com.web.sgucharitywebsite.dto.ProjectDto;
 import com.web.sgucharitywebsite.entity.AppUser;
@@ -15,6 +17,8 @@ import com.web.sgucharitywebsite.repository.AppUserRepository;
 import com.web.sgucharitywebsite.service.CategoryService;
 import com.web.sgucharitywebsite.service.ProjectService;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 import java.security.Principal;
 import java.util.List;
 
@@ -22,11 +26,14 @@ import java.util.List;
 public class ProjectController {
     private AppUserRepository appUserRepository;
     private ProjectService projectService;
+    private VNPAYService vnpayService;
 
     @Autowired
-    public ProjectController(AppUserRepository appUserRepository, ProjectService projectService) {
+    public ProjectController(AppUserRepository appUserRepository, VNPAYService vnpayService,
+            ProjectService projectService) {
         this.projectService = projectService;
         this.appUserRepository = appUserRepository;
+        this.vnpayService = vnpayService;
     }
 
     @GetMapping("/project")
@@ -62,5 +69,35 @@ public class ProjectController {
         model.addAttribute("project", projectDto);
         return "project-detail";
     }
+
+    // Chuyển hướng người dùng đến cổng thanh toán VNPAY
+    // @PostMapping("/submitOrder")
+    // public String submidOrder(@RequestParam("amount") int orderTotal,
+    // @RequestParam("orderInfo") String orderInfo,
+    // HttpServletRequest request) {
+    // String baseUrl = request.getScheme() + "://" + request.getServerName() + ":"
+    // + request.getServerPort();
+    // String vnpayUrl = vnPayService.createOrder(request, orderTotal, orderInfo,
+    // baseUrl);
+    // return "redirect:" + vnpayUrl;
+    // }
+
+    // // Sau khi hoàn tất thanh toán, VNPAY sẽ chuyển hướng trình duyệt về URL này
+    // @GetMapping("/vnpay-payment-return")
+    // public String paymentCompleted(HttpServletRequest request, Model model) {
+    // int paymentStatus = vnPayService.orderReturn(request);
+
+    // String orderInfo = request.getParameter("vnp_OrderInfo");
+    // String paymentTime = request.getParameter("vnp_PayDate");
+    // String transactionId = request.getParameter("vnp_TransactionNo");
+    // String totalPrice = request.getParameter("vnp_Amount");
+
+    // model.addAttribute("orderId", orderInfo);
+    // model.addAttribute("totalPrice", totalPrice);
+    // model.addAttribute("paymentTime", paymentTime);
+    // model.addAttribute("transactionId", transactionId);
+
+    // return paymentStatus == 1 ? "ordersuccess" : "orderfail";
+    // }
 
 }

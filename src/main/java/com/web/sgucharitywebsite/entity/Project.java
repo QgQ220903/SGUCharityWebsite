@@ -40,5 +40,5 @@ public class Project {
     @ManyToOne
     @JoinColumn(name="user_id", nullable = false)
     private AppUser user;
-
+ 
 }
