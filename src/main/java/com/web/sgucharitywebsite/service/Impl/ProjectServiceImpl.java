@@ -2,6 +2,7 @@ package com.web.sgucharitywebsite.service.Impl;
 
 import com.web.sgucharitywebsite.dto.CategoryDto;
 import com.web.sgucharitywebsite.dto.ProjectDto;
+import com.web.sgucharitywebsite.entity.AppUser;
 import com.web.sgucharitywebsite.entity.Category;
 import com.web.sgucharitywebsite.entity.Project;
 import com.web.sgucharitywebsite.repository.AppUserRepository;
@@ -21,7 +22,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Autowired
     public ProjectServiceImpl(CategoryRepository categoryRepository, AppUserRepository appUserRepository,
-            ProjectRepository projectRepository) {
+                              ProjectRepository projectRepository) {
         this.categoryRepository = categoryRepository;
         this.appUserRepository = appUserRepository;
         this.projectRepository = projectRepository;
@@ -37,8 +38,10 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public void createProject(ProjectDto projectDto) {
         Category category = categoryRepository.findById(projectDto.getCategoryId()).get();
+        AppUser user = appUserRepository.findById(projectDto.getUserId()).get();
         Project project = mapToProject(projectDto);
         project.setCategory(category);
+        project.setUser(user);
         projectRepository.save(project);
     }
 
@@ -97,6 +100,7 @@ public class ProjectServiceImpl implements ProjectService {
                 .createOn(project.getCreateOn())
                 .updateOn(project.getUpdateOn())
                 .categoryId(project.getCategory().getId())
+                .userId(project.getUser().getId())
                 .build();
     }
 }

@@ -38,9 +38,9 @@ public class ProjectController {
 
     @Autowired
     public ProjectController(AppUserRepository appUserRepository,
-            CategoryService categoryService,
-            VNPAYService vnpayService,
-            ProjectService projectService) {
+                             CategoryService categoryService,
+                             VNPAYService vnpayService,
+                             ProjectService projectService) {
         this.projectService = projectService;
         this.categoryService = categoryService;
         this.appUserRepository = appUserRepository;
@@ -112,11 +112,12 @@ public class ProjectController {
     // }
     @GetMapping("/project/create")
     public String createProjectForm(Model model, Principal principal) {
-        if (principal != null) {
-            String email = principal.getName();
-            AppUser appUser = appUserRepository.findByEmail(email);
-            model.addAttribute("user", appUser);
+        if (principal == null) {
+            return "redirect:/login";
         }
+        String email = principal.getName();
+        AppUser appUser = appUserRepository.findByEmail(email);
+        model.addAttribute("user", appUser);
         ProjectDto projectDto = new ProjectDto();
         model.addAttribute("project", projectDto);
         List<CategoryDto> categoryDtoList = categoryService.findAllCategories();
@@ -126,11 +127,25 @@ public class ProjectController {
 
     @PostMapping("/project/create")
     public String saveProject(@Valid @ModelAttribute("project") ProjectDto projectDto,
-            BindingResult result, Model model,
-            RedirectAttributes redirectAttributes) {
+                              BindingResult result, Model model,
+                              RedirectAttributes redirectAttributes, Principal principal) {
+
+        // Kiểm tra lỗi trong form
         if (result.hasErrors()) {
             model.addAttribute("project", projectDto);
             return "createProject";
+        }
+
+        // Lấy userId từ AppUser đã đăng nhập
+        if (principal != null) {
+            String email = principal.getName();
+            AppUser appUser = appUserRepository.findByEmail(email);
+            if (appUser != null) {
+                projectDto.setUserId(appUser.getId());  // Gán userId vào ProjectDto
+            } else {
+                model.addAttribute("error", "User not found.");
+                return "createProject";
+            }
         }
 
         // Xử lý ảnh tải lên
@@ -141,12 +156,14 @@ public class ProjectController {
                 projectDto.setThumbnail(imagePath); // Cập nhật đường dẫn vào DTO
             } catch (IOException ex) {
                 model.addAttribute("error", "Failed to upload the file.");
-                return "admin/project/create";
+                return "/project/create";
             }
         }
 
-        projectService.createProject(projectDto); // Lưu dự án vào DB
+        // Lưu dự án vào DB
+        projectService.createProject(projectDto);
         redirectAttributes.addFlashAttribute("success", "Project created successfully!");
-        return "redirect:/admin/project";
+        return "redirect:/project";
     }
+
 }

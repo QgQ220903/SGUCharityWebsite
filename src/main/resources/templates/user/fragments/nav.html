@@ -1,43 +1,102 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org">
+
+<head th:replace="user/fragments/head :: head"></head>
+
+<body>
 <!-- Navigation-->
-<nav class="navbar navbar-expand-lg navbar-light bg-white" th:fragment="nav">
-  <div class="container px-4 px-lg-5">
-    <a class="navbar-brand fw-bold" th:href="@{/home}"><span class="text-primary">SGU</span>Charity</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span
-        class="navbar-toggler-icon"></span></button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-        <li class="nav-item"><a class="nav-link active" aria-current="page" th:href="@{/user/home/index}">Trang Chủ</a>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" id="" href="#" role="button" data-bs-toggle="dropdown"
-            aria-expanded="false">Danh Mục Từ Thiện</a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="">Hỗ trợ học tập</a></li>
-            <li><a class="dropdown-item" href="">Hỗ trợ sinh hoạt</a></li>
-            <li><a class="dropdown-item" href="">Hỗ trợ y tế</a></li>
-          </ul>
-        </li>
-        <li class="nav-item"><a class="nav-link" th:href="@{/project}">Chương Trình Từ Thiện</a></li>
+<nav th:replace="user/fragments/nav :: nav"></nav>
 
-      </ul>
-      <div sec:authorize="!isAuthenticated()">
-        <a th:href="@{/register}" class="btn btn-secondary mx-2" type="submit">
-          Đăng Ký
-        </a>
-        <a th:href="@{/login}" class="btn btn-primary" type="submit">
-          Đăng Nhập
-        </a>
+<!-- hero -->
+<main>
+  <section class="py-5 text-center container">
+    <div class="row py-lg-5">
+      <div class="col-lg-6 col-md-8 mx-auto">
+        <h1 class="fw-light"> <span class="text-primary">SGU</span>Charity</h1>
+        <p class="lead text-muted">Hãy đề xuất các dự án từ thiện với chúng tôi.
+        </p>
       </div>
+    </div>
+  </section>
 
-      <div class="d-flex align-items-center gap-4" sec:authorize="isAuthenticated()">
-        <div class=""> Xin Chào <a href="" class="text-decoration-none fw-bold" th:text="${user.email}">Quách
-            Gia Quy</a></div>
-        <form sec:authorize="isAuthenticated()" method="post" action="/logout">
-          <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-          <button type="submit" class="btn btn-outline-primary">Đăng Xuất</button>
+  <div class="album py-5 bg-light">
+    <div class="container">
+
+      <div class="row g-3 mb-4">
+        <form role="form" method="post" th:action="@{/project/create}" th:object="${project}"
+              enctype="multipart/form-data">
+          <div class="card-body row">
+            <div class="form-group mb-3 col-lg-6">
+              <label>Tên dự án</label>
+              <input type="text" class="form-control" id="name" th:field="*{name}" name="name">
+            </div>
+            <div class="form-group mb-3 col-lg-6">
+              <label>Danh mục</label>
+              <select class="form-control" th:field="*{categoryId}">
+                <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}">
+                </option>
+              </select>
+            </div>
+            <div class="form-group mb-3 col-lg-6">
+              <label>Ngày bắt đầu</label>
+              <div class="input-group date" id="startDate" data-target-input="nearest">
+                <input type="text" class="form-control datetimepicker-input" data-target="#startDate"
+                       th:field="*{startTime}">
+              </div>
+            </div>
+            <div class="form-group mb-3 col-lg-6">
+              <label>Ngày kết thúc:</label>
+              <div class="input-group date" id="endDate" data-target-input="nearest">
+                <input type="text" class="form-control datetimepicker-input" data-target="#endDate"
+                       th:field="*{endTime}">
+              </div>
+            </div>
+            <div class="form-group mb-3 col-lg-6">
+              <label>Mục tiêu</label>
+              <input type="text" class="form-control" th:field="*{targetAmount}">
+            </div>
+            <div class="form-group mb-3 col-lg-6">
+              <label>Trạng Thái</label>
+              <input type="text" class="form-control" th:value="'Chờ duyệt'" readonly />
+            </div>
+            <div class="form-group mb-3 col-md-12">
+              <div class="card card-outline card-info">
+                <div class="card-header">
+                  <h3 class="card-title">
+                    Nội dung
+                  </h3>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                  <textarea id="summernote" th:field="*{content}"></textarea>
+                </div>
+                <div class="card-footer">
+                </div>
+              </div>
+            </div>
+            <div class="form-group mb-3 col-lg-6">
+              <label for="thumbnailFile">Hình ảnh</label>
+              <input class="form-control" type="file" id="thumbnailFile" name="thumbnailFile" accept="image/*" />
+            </div>
+            <!--              <input type="hidden" th:field="*{userId}" th:value="${user.id}">-->
+            <!-- /.col-->
+          </div>
+          <!-- /.card-body -->
+
+          <div class="card-footer">
+            <button type="submit" class="btn btn-primary">Thêm</button>
+            <a href="/admin/project" type="submit" class="btn btn-danger">Hủy</a>
+          </div>
         </form>
       </div>
     </div>
   </div>
-</nav>
+
+</main>
+
+<footer th:replace="user/fragments/footer :: footer"></footer>
+<div th:replace="user/fragments/scripts :: scripts"></div>
+
+</body>
+
+</html>

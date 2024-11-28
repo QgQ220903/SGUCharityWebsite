@@ -4,101 +4,98 @@
 <head th:replace="user/fragments/head :: head"></head>
 
 <body>
-  <!-- Navigation-->
-  <nav th:replace="user/fragments/nav :: nav"></nav>
+<!-- Navigation-->
+<nav th:replace="user/fragments/nav :: nav"></nav>
 
-  <!-- hero -->
-  <main>
-    <section class="py-5 text-center container">
-      <div class="row py-lg-5">
-        <div class="col-lg-6 col-md-8 mx-auto">
-          <h1 class="fw-light"> <span class="text-primary">SGU</span>Charity</h1>
-          <p class="lead text-muted">Hãy đề xuất các dự án từ thiện với chúng tôi.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <div class="album py-5 bg-light">
-      <div class="container">
-
-        <div class="row g-3 mb-4">
-          <form role="form" method="post" th:action="@{/admin/project/create}" th:object="${project}"
-            enctype="multipart/form-data">
-            <div class="card-body row">
-              <div class="form-group mb-3 col-lg-6">
-                <label>Tên dự án</label>
-                <input type="text" class="form-control" id="name" th:field="*{name}" name="name">
-              </div>
-              <div class="form-group mb-3 col-lg-6">
-                <label>Danh mục</label>
-                <select class="form-control" th:field="*{categoryId}">
-                  <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}">
-                  </option>
-                </select>
-              </div>
-              <div class="form-group mb-3 col-lg-6">
-                <label>Ngày bắt đầu</label>
-                <div class="input-group date" id="startDate" data-target-input="nearest">
-                  <input type="text" class="form-control datetimepicker-input" data-target="#startDate"
-                    th:field="*{startTime}">
-                </div>
-              </div>
-              <div class="form-group mb-3 col-lg-6">
-                <label>Ngày kết thúc:</label>
-                <div class="input-group date" id="endDate" data-target-input="nearest">
-                  <input type="text" class="form-control datetimepicker-input" data-target="#endDate"
-                    th:field="*{endTime}">
-                </div>
-              </div>
-              <div class="form-group mb-3 col-lg-6">
-                <label>Mục tiêu</label>
-                <input type="text" class="form-control" th:field="*{targetAmount}">
-              </div>
-              <div class="form-group mb-3 col-lg-6">
-                <label>Trạng Thái</label>
-                <select class="form-control" th:field="*{status}">
-                  <option th:value="'Chờ duyệt'" th:text="'Chờ duyệt'"></option>
-                  <option th:value="'Đã duyệt'" th:text="'Đã duyệt'"></option>
-                  <option th:value="'Từ chối'" th:text="'Từ chối'"></option>
-                </select>
-              </div>
-              <div class="form-group mb-3 col-md-12">
-                <div class="card card-outline card-info">
-                  <div class="card-header">
-                    <h3 class="card-title">
-                      Nội dung
-                    </h3>
-                  </div>
-                  <!-- /.card-header -->
-                  <div class="card-body">
-                    <textarea id="summernote" th:field="*{content}"></textarea>
-                  </div>
-                  <div class="card-footer">
-                  </div>
-                </div>
-              </div>
-              <div class="form-group mb-3 col-lg-6">
-                <label for="thumbnailFile">Hình ảnh</label>
-                <input class="form-control" type="file" id="thumbnailFile" name="thumbnailFile" accept="image/*" />
-              </div>
-              <!-- /.col-->
-            </div>
-            <!-- /.card-body -->
-
-            <div class="card-footer">
-              <button type="submit" class="btn btn-primary">Thêm</button>
-              <a href="/admin/project" type="submit" class="btn btn-danger">Hủy</a>
-            </div>
-          </form>
-        </div>
+<!-- hero -->
+<main>
+  <section class="py-5 text-center container">
+    <div class="row py-lg-5">
+      <div class="col-lg-6 col-md-8 mx-auto">
+        <h1 class="fw-light"> <span class="text-primary">SGU</span>Charity</h1>
+        <p class="lead text-muted">Hãy đề xuất các dự án từ thiện với chúng tôi.
+        </p>
       </div>
     </div>
+  </section>
 
-  </main>
+  <div class="album py-5 bg-light">
+    <div class="container">
 
-  <footer th:replace="user/fragments/footer :: footer"></footer>
-  <div th:replace="user/fragments/scripts :: scripts"></div>
+      <div class="row g-3 mb-4">
+        <form role="form" method="post" th:action="@{/project/create}" th:object="${project}"
+              enctype="multipart/form-data">
+          <div class="card-body row">
+            <div class="form-group mb-3 col-lg-6">
+              <label>Tên dự án</label>
+              <input type="text" class="form-control" id="name" th:field="*{name}" name="name">
+            </div>
+            <div class="form-group mb-3 col-lg-6">
+              <label>Danh mục</label>
+              <select class="form-control" th:field="*{categoryId}">
+                <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}">
+                </option>
+              </select>
+            </div>
+            <div class="form-group mb-3 col-lg-6">
+              <label>Ngày bắt đầu</label>
+              <div class="input-group date" id="startDate" data-target-input="nearest">
+                <input type="text" class="form-control datetimepicker-input" data-target="#startDate"
+                       th:field="*{startTime}">
+              </div>
+            </div>
+            <div class="form-group mb-3 col-lg-6">
+              <label>Ngày kết thúc:</label>
+              <div class="input-group date" id="endDate" data-target-input="nearest">
+                <input type="text" class="form-control datetimepicker-input" data-target="#endDate"
+                       th:field="*{endTime}">
+              </div>
+            </div>
+            <div class="form-group mb-3 col-lg-6">
+              <label>Mục tiêu</label>
+              <input type="text" class="form-control" th:field="*{targetAmount}">
+            </div>
+            <div class="form-group mb-3 col-lg-6">
+              <label>Trạng Thái</label>
+              <input type="text" class="form-control" th:value="'Chờ duyệt'" readonly />
+            </div>
+            <div class="form-group mb-3 col-md-12">
+              <div class="card card-outline card-info">
+                <div class="card-header">
+                  <h3 class="card-title">
+                    Nội dung
+                  </h3>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                  <textarea id="summernote" th:field="*{content}"></textarea>
+                </div>
+                <div class="card-footer">
+                </div>
+              </div>
+            </div>
+            <div class="form-group mb-3 col-lg-6">
+              <label for="thumbnailFile">Hình ảnh</label>
+              <input class="form-control" type="file" id="thumbnailFile" name="thumbnailFile" accept="image/*" />
+            </div>
+            <!--              <input type="hidden" th:field="*{userId}" th:value="${user.id}">-->
+            <!-- /.col-->
+          </div>
+          <!-- /.card-body -->
+
+          <div class="card-footer">
+            <button type="submit" class="btn btn-primary">Thêm</button>
+            <a href="/admin/project" type="submit" class="btn btn-danger">Hủy</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer th:replace="user/fragments/footer :: footer"></footer>
+<div th:replace="user/fragments/scripts :: scripts"></div>
 
 </body>
 
