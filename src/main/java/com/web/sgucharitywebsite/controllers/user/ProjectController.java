@@ -3,22 +3,29 @@ package com.web.sgucharitywebsite.controllers.user;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.web.sgucharitywebsite.config.VNPAYService;
 import com.web.sgucharitywebsite.dto.CategoryDto;
 import com.web.sgucharitywebsite.dto.ProjectDto;
 import com.web.sgucharitywebsite.entity.AppUser;
 import com.web.sgucharitywebsite.entity.Project;
+import com.web.sgucharitywebsite.helper.ImgStorage;
 import com.web.sgucharitywebsite.repository.AppUserRepository;
 import com.web.sgucharitywebsite.service.CategoryService;
 import com.web.sgucharitywebsite.service.ProjectService;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 
@@ -26,12 +33,16 @@ import java.util.List;
 public class ProjectController {
     private AppUserRepository appUserRepository;
     private ProjectService projectService;
+    private CategoryService categoryService;
     private VNPAYService vnpayService;
 
     @Autowired
-    public ProjectController(AppUserRepository appUserRepository, VNPAYService vnpayService,
+    public ProjectController(AppUserRepository appUserRepository,
+            CategoryService categoryService,
+            VNPAYService vnpayService,
             ProjectService projectService) {
         this.projectService = projectService;
+        this.categoryService = categoryService;
         this.appUserRepository = appUserRepository;
         this.vnpayService = vnpayService;
     }
@@ -99,5 +110,43 @@ public class ProjectController {
 
     // return paymentStatus == 1 ? "ordersuccess" : "orderfail";
     // }
+    @GetMapping("/project/create")
+    public String createProjectForm(Model model, Principal principal) {
+        if (principal != null) {
+            String email = principal.getName();
+            AppUser appUser = appUserRepository.findByEmail(email);
+            model.addAttribute("user", appUser);
+        }
+        ProjectDto projectDto = new ProjectDto();
+        model.addAttribute("project", projectDto);
+        List<CategoryDto> categoryDtoList = categoryService.findAllCategories();
+        model.addAttribute("categories", categoryDtoList);
+        return "createProject";
+    }
 
+    @PostMapping("/project/create")
+    public String saveProject(@Valid @ModelAttribute("project") ProjectDto projectDto,
+            BindingResult result, Model model,
+            RedirectAttributes redirectAttributes) {
+        if (result.hasErrors()) {
+            model.addAttribute("project", projectDto);
+            return "createProject";
+        }
+
+        // Xử lý ảnh tải lên
+        MultipartFile image = projectDto.getThumbnailFile();
+        if (image != null && !image.isEmpty()) {
+            try {
+                String imagePath = ImgStorage.saveImg(image); // Lưu ảnh và lấy đường dẫn
+                projectDto.setThumbnail(imagePath); // Cập nhật đường dẫn vào DTO
+            } catch (IOException ex) {
+                model.addAttribute("error", "Failed to upload the file.");
+                return "admin/project/create";
+            }
+        }
+
+        projectService.createProject(projectDto); // Lưu dự án vào DB
+        redirectAttributes.addFlashAttribute("success", "Project created successfully!");
+        return "redirect:/admin/project";
+    }
 }
