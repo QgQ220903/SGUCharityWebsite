@@ -2,8 +2,7 @@ package com.web.sgucharitywebsite.controllers.admin;
 
 import com.web.sgucharitywebsite.dto.BlogDto;
 import com.web.sgucharitywebsite.dto.CategoryDto;
-import com.web.sgucharitywebsite.dto.ProjectDto;
-import com.web.sgucharitywebsite.helper.ImgStorage;
+import com.web.sgucharitywebsite.repository.helper.ImgStorage;
 import com.web.sgucharitywebsite.service.BlogService;
 import com.web.sgucharitywebsite.service.CategoryService;
 import jakarta.validation.Valid;
