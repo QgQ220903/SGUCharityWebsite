@@ -2,6 +2,8 @@ package com.web.sgucharitywebsite.controllers.admin;
 
 import com.web.sgucharitywebsite.dto.CategoryDto;
 import com.web.sgucharitywebsite.dto.ProjectDto;
+import com.web.sgucharitywebsite.entity.AppUser;
+import com.web.sgucharitywebsite.repository.AppUserRepository;
 import com.web.sgucharitywebsite.service.CategoryService;
 import com.web.sgucharitywebsite.service.ProjectService;
 import jakarta.validation.Valid;
@@ -18,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.*;
+import java.security.Principal;
 import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.List;
@@ -27,23 +30,37 @@ import java.util.List;
 @RequestMapping("/admin")
 public class AdminProjectController {
 
+    private AppUserRepository appUserRepository;
     private ProjectService projectService;
     @Autowired
     private CategoryService categoryService;
 
-    public AdminProjectController(ProjectService projectService) {
+    public AdminProjectController(ProjectService projectService, AppUserRepository appUserRepository, CategoryService categoryService) {
+
         this.projectService = projectService;
+        this.categoryService = categoryService;
+        this.appUserRepository = appUserRepository;
     }
 
     @RequestMapping("/project")
-    public String adminProject(Model model) {
+    public String adminProject(Model model, Principal principal) {
+        if (principal != null) {
+            String email = principal.getName();
+            AppUser appUser = appUserRepository.findByEmail(email);
+            model.addAttribute("user", appUser);
+        }
         List<ProjectDto> projectDtoList = projectService.findAllProjects();
         model.addAttribute("projects", projectDtoList);
         return "admin/project/index";
     }
 
     @GetMapping("/project/create")
-    public String createProjectForm(Model model) {
+    public String createProjectForm(Model model,Principal principal) {
+        if (principal != null) {
+            String email = principal.getName();
+            AppUser appUser = appUserRepository.findByEmail(email);
+            model.addAttribute("user", appUser);
+        }
         ProjectDto projectDto = new ProjectDto();
         model.addAttribute("project", projectDto);
         List<CategoryDto> categoryDtoList = categoryService.findAllCategories();
@@ -54,12 +71,24 @@ public class AdminProjectController {
     @PostMapping("/project/create")
     public String saveProject(@Valid @ModelAttribute("project") ProjectDto projectDto,
                               BindingResult result, Model model,
-                              RedirectAttributes redirectAttributes) {
+                              RedirectAttributes redirectAttributes, Principal principal) {
         if (result.hasErrors()) {
+            List<CategoryDto> categoryDtoList = categoryService.findAllCategories();
+            model.addAttribute("categories", categoryDtoList);
             model.addAttribute("project", projectDto);
             return "admin/project/create";
         }
-
+        // Lấy userId từ AppUser đã đăng nhập
+        if (principal != null) {
+            String email = principal.getName();
+            AppUser appUser = appUserRepository.findByEmail(email);
+            if (appUser != null) {
+                projectDto.setUserId(appUser.getId());  // Gán userId vào ProjectDto
+            } else {
+                model.addAttribute("error", "User not found.");
+                return "admin/project/create";
+            }
+        }
         // Xử lý ảnh tải lên
         MultipartFile image = projectDto.getThumbnailFile();
         if (image != null && !image.isEmpty()) {
@@ -93,12 +122,24 @@ public class AdminProjectController {
     @PostMapping("/project/update/{projectId}")
     public String updateProject(@PathVariable("projectId") long projectId,
                                 @Valid @ModelAttribute("project") ProjectDto projectDto,
-                                BindingResult result, Model model) {
+                                BindingResult result, Model model, Principal principal) {
         if (result.hasErrors()) {
+            List<CategoryDto> categoryDtoList = categoryService.findAllCategories();
+            model.addAttribute("categories", categoryDtoList);
             model.addAttribute("project", projectDto);
             return "admin/project/update";
         }
-
+        // Lấy userId từ AppUser đã đăng nhập
+        if (principal != null) {
+            String email = principal.getName();
+            AppUser appUser = appUserRepository.findByEmail(email);
+            if (appUser != null) {
+                projectDto.setUserId(appUser.getId());  // Gán userId vào ProjectDto
+            } else {
+                model.addAttribute("error", "User not found.");
+                return "admin/project/update";
+            }
+        }
         // Xử lý ảnh mới nếu được tải lên
         MultipartFile image = projectDto.getThumbnailFile();
         if (image != null && !image.isEmpty()) {

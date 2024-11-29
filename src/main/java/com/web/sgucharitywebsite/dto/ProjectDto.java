@@ -33,6 +33,7 @@ public class ProjectDto {
     private LocalDateTime createOn;
     private LocalDateTime updateOn;
     private Long categoryId;
+    private Long userId;
     private CategoryDto category; // Include a nested CategoryDto for simplified data transfer
     private RegistrationDto user;        // Include a nested AppUserDto for user information
     private MultipartFile thumbnailFile;
@@ -40,9 +41,18 @@ public class ProjectDto {
         return categoryId;
     }
 
+    public Long getUserId() {
+        return userId;
+    }
+
     public void setCategoryId(Long categoryId) {
         this.categoryId = categoryId;
     }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
     public String getFormattedTargetAmount() {
         return CurrencyFormatter.formatToVND(targetAmount);
     }
