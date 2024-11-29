@@ -81,6 +81,13 @@ public class AdminUserController {
     return "admin/user/update";
   }
 
+  @GetMapping("/user/detail/{userId}")
+  public String detail(@PathVariable("userId") long userId, Model model) {
+    RegistrationDto registrationDto = appUserService.findAppUserById(userId);
+    model.addAttribute("registrationDto", registrationDto);
+    return "admin/user/detail";
+  }
+
   @PostMapping("/user/update/{userId}")
   public String update(@PathVariable("userId") long userId,
       @Valid @ModelAttribute("registrationDto") RegistrationDto registrationDto,
