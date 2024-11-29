@@ -16,21 +16,45 @@ public class SecurityConfig {
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    return http
-        .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/css/**", "/js/**", "/img/**", "/", "/home", "/project", "/project/**", "/createOrder", "/submitOrder", "/vnpay-payment-return","/vnpay-payment/**","/vnpay-payment")
-            .permitAll()
-            .requestMatchers("/register").permitAll()
-            .requestMatchers("/logout").permitAll()
-            .requestMatchers("/resources/**").permitAll()
-            .requestMatchers("/user/css/**").permitAll() // Added for user CSS
+      return http
+          .authorizeHttpRequests(auth -> auth
+              .requestMatchers("/css/**", "/js/**", "/img/**", "/", "/home", "/project", "/project/**", "/createOrder", "/submitOrder", "/vnpay-payment-return","/vnpay-payment/**","/vnpay-payment")
+              .permitAll()
+              .requestMatchers("/register").permitAll()
+              .requestMatchers("/logout").permitAll()
+              .requestMatchers("/resources/**").permitAll()
+              .requestMatchers("/user/css/**").permitAll() // Added for user CSS
 
-            .anyRequest().authenticated())
-        .formLogin(form -> form
-            .defaultSuccessUrl("/home", true))
-        .logout(config -> config.logoutSuccessUrl("/home"))
-        .build();
+              .anyRequest().authenticated())
+          .formLogin(form -> form
+              .loginPage("/login") // Trỏ đến URL của trang login
+              .loginProcessingUrl("/login")   
+              .defaultSuccessUrl("/home", true)
+              .failureUrl("/login?error=true") // Thêm tham số error khi login thất bại
+              .permitAll())  // Cho phép truy cập URL của trang login mà không cần authentication
+          .logout(config -> config.logoutSuccessUrl("/home"))
+          .build();
   }
+  // @Bean
+  // public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+  //   return http
+  //       .authorizeHttpRequests(auth -> auth
+  //           .requestMatchers("/css/**", "/js/**", "/img/**", "/", "/home", "/project", "/project/**", "/createOrder", "/submitOrder", "/vnpay-payment-return","/vnpay-payment/**","/vnpay-payment")
+  //           .permitAll()
+  //           .requestMatchers("/register").permitAll()
+  //           .requestMatchers("/logout").permitAll()
+  //           .requestMatchers("/resources/**").permitAll()
+  //           .requestMatchers("/user/css/**").permitAll() // Added for user CSS
+
+  //           .anyRequest().authenticated())
+  //       .formLogin(form -> form
+  //           .defaultSuccessUrl("/home", true))
+  //       .logout(config -> config.logoutSuccessUrl("/home"))
+  //       .build();
+  // }
+
+
+
 
   @Bean
   public PasswordEncoder passwordEncoder() {

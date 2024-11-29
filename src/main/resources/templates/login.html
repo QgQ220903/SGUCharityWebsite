@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org">
+
+<head th:replace="user/fragments/head :: head"></head>
+
+<body>
+    
+    <nav th:replace="user/fragments/nav :: nav"></nav>
+
+    <section class="vh-100" style="">
+        <div class="container h-100">
+            <div class="row d-flex justify-content-center align-items-center h-100 ">
+                <div class="col col-xl-10">
+                    <div class="card overflow-hidden" style="border-radius: 1rem;">
+                        <div class="row g-0 ">
+                            <div class="col-md-6 col-lg-6 d-none d-md-block ">
+                                <img src="https://xdcs.cdnchinhphu.vn/446259493575335936/2023/7/25/dh-16902723190611350202437.jpg" alt="login form" class="img-fluid " 
+                                    style="
+                                    object-fit: cover;
+                                    max-width: 100%;
+                                    height: 100%;" />
+                            </div>
+                            <div class="col-md-6 col-lg-6 d-flex align-items-center my-3">
+                                <div class="card-body p-4 pt-3 p-lg-5 pt-lg-4 text-black">
+                                    <form th:action="@{/login}" method="post" autocomplete="off">
+                                       
+                                        <div class="d-flex align-items-center mb-4 pb-1 border-bottom border-1 ">
+
+                                           <p class="fw-bold fs-3"> <span class="text-primary fw-bold ">SGU</span>Charity</p>
+                                        </div>
+                                        <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Sign into your
+                                            account</h5>
+                                        <label class="mb-2" for="username">Username:</label>
+                                        <input class="form-control" type="text" id="username" name="username" required />
+                                        <br/>
+                                        <label class="mb-2" for="password">Password:</label>
+                                        <input  class="form-control"type="password" id="password" name="password" required />
+                                        <br/>
+                                        <button class="btn btn-primary mt-2"  type="submit">Login</button>
+                                    </form>
+
+                                 
+                                    <div class="mt-4 text-start">
+                                        <a class="small text-muted">Forgot password?</a>
+                                        <p>Do not have an account? <a class="" >Register</a></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Hiển thị SweetAlert2 nếu có lỗi -->
+    <script th:if="${param.error}" type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function() {
+            Swal.fire({
+                icon: 'error',
+                title: 'Đăng nhập thất bại!',
+                text: 'Vui lòng kiểm tra lại username và password.',
+                confirmButtonText: 'Đóng'
+            });
+        });
+    </script>
+  
+</body>
+
+
+</html>
