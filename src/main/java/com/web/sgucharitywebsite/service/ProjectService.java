@@ -17,4 +17,5 @@ public interface ProjectService {
     Project findProjectByIdEntity(long projectId);
     void deleteProjectById(long projectId);
     Project saveProject(ProjectDto projectDto);
+    List<Object[]> getProjectsAndAmount();
 }
