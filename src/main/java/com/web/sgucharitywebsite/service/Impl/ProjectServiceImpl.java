@@ -36,6 +36,14 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    public List<Object[]> getProjectsAndAmount() {
+        return projectRepository.findAll()
+                .stream()
+                .map(project -> new Object[]{project.getName(), project.getCurrentAmount()})
+                .toList();
+    }
+
+    @Override
     public void createProject(ProjectDto projectDto) {
         Category category = categoryRepository.findById(projectDto.getCategoryId()).get();
         AppUser user = appUserRepository.findById(projectDto.getUserId()).get();

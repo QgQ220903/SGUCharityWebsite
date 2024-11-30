@@ -16,12 +16,12 @@
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1 class="m-0">Starter Page</h1>
+                            <h1 class="m-0">Thống Kê</h1>
                         </div><!-- /.col -->
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                <li class="breadcrumb-item active">Starter Page</li>
+                                <li class="breadcrumb-item"><a href="#">Trang Chủ</a></li>
+                                <li class="breadcrumb-item active">Thống Kê</li>
                             </ol>
                         </div><!-- /.col -->
                     </div><!-- /.row -->
@@ -31,69 +31,197 @@
 
             <!-- Main content -->
             <div class="content">
-                <div class="container-fluid">
+                <div class="container">
                     <div class="row">
-                        <div class="col-lg-6">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5 class="card-title">Card title</h5>
-
-                                    <p class="card-text">
-                                        Some quick example text to build on the card title and make up the bulk of the
-                                        card's
-                                        content.
-                                    </p>
-
-                                    <a href="#" class="card-link">Card link</a>
-                                    <a href="#" class="card-link">Another link</a>
+                        <div class="col-lg-4 col-6">
+                            <!-- small box -->
+                            <div class="small-box bg-danger">
+                                <div class="inner">
+                                    <h3>65</h3>
+                                    <p>Tổng Số Dự Án</p>
                                 </div>
-                            </div>
-
-                            <div class="card card-primary card-outline">
-                                <div class="card-body">
-                                    <h5 class="card-title">Card title</h5>
-
-                                    <p class="card-text">
-                                        Some quick example text to build on the card title and make up the bulk of the
-                                        card's
-                                        content.
-                                    </p>
-                                    <a href="#" class="card-link">Card link</a>
-                                    <a href="#" class="card-link">Another link</a>
-                                </div>
-                            </div><!-- /.card -->
-                        </div>
-                        <!-- /.col-md-6 -->
-                        <div class="col-lg-6">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h5 class="m-0">Featured</h5>
-                                </div>
-                                <div class="card-body">
-                                    <h6 class="card-title">Special title treatment</h6>
-
-                                    <p class="card-text">With supporting text below as a natural lead-in to additional
-                                        content.</p>
-                                    <a href="#" class="btn btn-primary">Go somewhere</a>
-                                </div>
-                            </div>
-
-                            <div class="card card-primary card-outline">
-                                <div class="card-header">
-                                    <h5 class="m-0">Featured</h5>
-                                </div>
-                                <div class="card-body">
-                                    <h6 class="card-title">Special title treatment</h6>
-
-                                    <p class="card-text">With supporting text below as a natural lead-in to additional
-                                        content.</p>
-                                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                                <div class="icon">
+                                    <i class="ion ion-pie-graph"></i>
                                 </div>
                             </div>
                         </div>
-                        <!-- /.col-md-6 -->
+                        <div class="col-lg-4 col-6">
+                            <!-- small box -->
+                            <div class="small-box bg-warning">
+                                <div class="inner">
+                                    <h3>44</h3>
+                                    <p>Tổng Số Người Dùng</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-person-add"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-6">
+                            <!-- small box -->
+                            <div class="small-box bg-success">
+                                <div class="inner">
+                                    <h3>53<sup style="font-size: 20px">%</sup></h3>
+
+                                    <p>Tổng Số Tiền Quyên Góp</p>
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-stats-bars"></i>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <!-- /.row -->
+
+                    <h2>Thống kê dự án theo thể loại</h2>
+                    <div class="d-flex align-items-center justify-content-center">
+                        <div class="w-50 ">
+                            <canvas id="myPieChart"  ></canvas>
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="d-flex gap-2 mt-3">
+                        <div class="w-50 ">
+                            <h5>Thống kê Số tiền quyên góp theo từng dự án</h5>
+                            <canvas id="myBarChart" width="400" height="200"></canvas>
+                        </div>
+                        <div class="w-50">
+
+                            <h5>Số tiền quyên góp theo thời gian</h5>
+                            <canvas id="myLineChart" width="400" height="200"></canvas>
+                        </div>
+                    </div>
+
+
+
+
+                    <script>
+                        // Pie Chart
+                        // var ctxPie = document.getElementById('myPieChart').getContext('2d');
+                        // var myPieChart = new Chart(ctxPie, {
+                        //     type: 'pie', // Chọn loại biểu đồ là Pie
+                        //     data: {
+                        //         labels: ['Project A', 'Project B', 'Project C', 'Project D'],
+                        //         datasets: [{
+                        //             data: [300, 500, 100, 700], // Dữ liệu cho các phần của biểu đồ
+                        //             backgroundColor: ['#FF5733', '#33FF57', '#3357FF', '#FF33A1'], // Màu sắc cho từng phần
+                        //             borderColor: '#ffffff', // Màu viền
+                        //             borderWidth: 2
+                        //         }]
+                        //     }
+                        // });
+
+                        fetch('/api/projects-by-category')
+                            .then(response => response.json())
+
+                            .then(data => {
+                                // Extract category names and project counts from the API response
+                                const labels = data.map(item => item[0]);  // Category names (tên thể loại)
+                                const counts = data.map(item => item[1]);  // Number of projects in each category (số lượng dự án)
+                                console.log(data);
+                                // Tạo biểu đồ tròn (Pie Chart)
+                                var ctxPie = document.getElementById('myPieChart').getContext('2d');
+                                var myPieChart = new Chart(ctxPie, {
+                                    type: 'pie', // Loại biểu đồ là Pie
+                                    data: {
+                                        labels: labels, // Nhãn cho mỗi phần tử trong biểu đồ (Tên thể loại)
+                                        datasets: [{
+                                            data: counts, // Số lượng dự án cho mỗi thể loại
+                                            backgroundColor: ['#FF5733', '#33FF57', '#3357FF', '#FF33A1'], // Màu sắc cho các phần
+                                            borderColor: '#ffffff', // Màu viền của các phần
+                                            borderWidth: 2
+                                        }]
+                                    }
+                                });
+                            })
+                            .catch(error => {
+                                console.error('Error fetching data:', error);  // Đoạn này giúp kiểm tra lỗi khi fetch dữ liệu
+                            });
+
+
+                        // // Bar Chart
+                        // var ctxBar = document.getElementById('myBarChart').getContext('2d');
+                        // var myBarChart = new Chart(ctxBar, {
+                        //     type: 'bar', // Chọn loại biểu đồ là Bar
+                        //     data: {
+                        //         labels: ['Project A', 'Project B', 'Project C', 'Project D'],
+                        //         datasets: [{
+                        //             label: 'Amount Raised ($)', // Tên cho bộ dữ liệu
+                        //             data: [1500, 3000, 2000, 3500], // Dữ liệu cho các thanh cột
+                        //             backgroundColor: 'rgba(75, 192, 192, 0.2)', // Màu nền cho các thanh
+                        //             borderColor: 'rgba(75, 192, 192, 1)', // Màu viền
+                        //             borderWidth: 1
+                        //         }]
+                        //     },
+                        //     options: {
+                        //         scales: {
+                        //             y: {
+                        //                 beginAtZero: true // Đảm bảo trục Y bắt đầu từ 0
+                        //             }
+                        //         }
+                        //     }
+                        // });
+
+                        // Fetch dữ liệu từ API
+                        fetch('/api/projects-amount')
+                            .then(response => response.json())
+                            .then(data => {
+                                // Lấy tên dự án và tổng số tiền từ API response
+                                const labels = data.map(item => item[0]);  // Tên dự án
+                                const amounts = data.map(item => item[1]); // Số tiền huy động trong mỗi dự án
+
+                                // Vẽ biểu đồ Bar
+                                var ctxBar = document.getElementById('myBarChart').getContext('2d');
+                                var myBarChart = new Chart(ctxBar, {
+                                    type: 'bar', // Biểu đồ cột (Bar)
+                                    data: {
+                                        labels: labels, // Tên dự án
+                                        datasets: [{
+                                            label: 'Amount Raised ($)', // Nhãn cho bộ dữ liệu
+                                            data: amounts, // Dữ liệu số tiền
+                                            backgroundColor: 'rgba(75, 192, 192, 0.2)', // Màu nền của các cột
+                                            borderColor: 'rgba(75, 192, 192, 1)', // Màu viền của các cột
+                                            borderWidth: 1
+                                        }]
+                                    },
+                                    options: {
+                                        scales: {
+                                            y: {
+                                                beginAtZero: true // Đảm bảo trục Y bắt đầu từ 0
+                                            }
+                                        }
+                                    }
+                                });
+                            })
+                            .catch(error => {
+                                console.error('Error fetching data:', error);  // Xử lý lỗi khi fetch dữ liệu
+                            });
+
+                        // Line Chart
+                        var ctxLine = document.getElementById('myLineChart').getContext('2d');
+                        var myLineChart = new Chart(ctxLine, {
+                            type: 'line', // Chọn loại biểu đồ là Line
+                            data: {
+                                labels: ['January', 'February', 'March', 'April'], // Các mốc thời gian
+                                datasets: [{
+                                    label: 'Donations Over Time ($)', // Tên cho bộ dữ liệu
+                                    data: [500, 1000, 1500, 2000], // Dữ liệu theo thời gian
+                                    fill: false, // Không tô màu dưới đường
+                                    borderColor: 'rgba(75, 192, 192, 1)', // Màu của đường
+                                    tension: 0.1 // Độ cong của đường
+                                }]
+                            },
+                            options: {
+                                scales: {
+                                    y: {
+                                        beginAtZero: true // Đảm bảo trục Y bắt đầu từ 0
+                                    }
+                                }
+                            }
+                        });
+                    </script>
                 </div><!-- /.container-fluid -->
             </div>
             <!-- /.content -->
@@ -109,6 +237,8 @@
     <!-- REQUIRED SCRIPTS -->
 
     <div th:replace="admin/fragments/script :: script"></div>
+    <script th:src="@{/admin/dist/js/home.js}"></script>
+
 </body>
 
 </html>
