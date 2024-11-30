@@ -62,6 +62,15 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    public void updateProjectEntity(Project project) {
+        Category category = categoryRepository.findById(project.getCategory().getId()).get();
+        AppUser user = appUserRepository.findById(project.getUser().getId()).get();
+        project.setCategory(category);
+        project.setUser(user);
+        projectRepository.save(project);
+    }
+
+    @Override
     public ProjectDto findProjectById(long projectId) {
         Project project = projectRepository.findById(projectId).get();
         return mapToProjectDto(project);

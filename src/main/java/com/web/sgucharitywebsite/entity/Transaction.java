@@ -21,13 +21,13 @@ public class Transaction {
     @Column(name = "vnp_OrderInfo")
     private String vnpOrderInfo; // Nội dung giao dịch của vnpay
     @Column(name = "vnp_PayDate")
-    private String vnpPayDate; // Thời gian thanh toán
+    private LocalDateTime vnpPayDate; // Thời gian thanh toán
     @Column(name = "vnp_OrderStatus")
     private String vnpOrderStatus; // Trạng thái giao dịch
     @Column(name = "vnp_TransactionNo")
     private String vnpTransactionNo; // Mã giao dịch của VNPay
     @Column(name = "vnp_Amount")
-    private String vnpAmount;
+    private Double vnpAmount;
     @ManyToOne
     @JoinColumn(name="project_id", nullable = false)
     private Project project;

@@ -22,6 +22,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.security.Principal;
+import java.time.LocalDateTime;
 
 @Controller
 // VNPAYController
@@ -72,20 +73,22 @@ public class VNPAYController {
 
         Transaction transaction = new Transaction();
 
-        transaction.setVnpAmount(request.getParameter("vnp_Amount"));
+        transaction.setVnpAmount(Double.valueOf(request.getParameter("vnp_Amount")) / 100);
         transaction.setVnpOrderInfo(request.getParameter("vnp_OrderInfo"));
         transaction.setVnpOrderStatus(request.getParameter("paymentStatus"));
-        transaction.setVnpPayDate(request.getParameter("vnp_PayDate"));
+        LocalDateTime now = LocalDateTime.now();
+        transaction.setVnpPayDate(now);
         transaction.setVnpTransactionNo(request.getParameter("vnp_TransactionNo"));
 
         Project project = projectService.findProjectByIdEntity(this.projectId);
+
         transaction.setProject(project);
-
         transactionService.createTransaction(transaction);
-
+        project.setCurrentAmount(project.getCurrentAmount() + transaction.getVnpAmount());
+        projectService.updateProjectEntity(project);
         model.addAttribute("orderId", orderInfo);
-        model.addAttribute("totalPrice", totalPrice);
-        model.addAttribute("paymentTime", paymentTime);
+        model.addAttribute("totalPrice", transaction.getVnpAmount());
+        model.addAttribute("paymentTime", transaction.getVnpPayDate());
         model.addAttribute("transactionId", transactionId);
 
         return paymentStatus == 1 ? "ordersuccess" : "orderfail";
