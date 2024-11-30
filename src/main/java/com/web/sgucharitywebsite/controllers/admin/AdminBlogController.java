@@ -45,6 +45,8 @@ public class AdminBlogController {
     public String saveBlog(@Valid @ModelAttribute("blog") BlogDto blogDto, BindingResult result,
                               Model model, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
+            List<CategoryDto> categoryDtoList = categoryService.findAllCategories(); // Lấy lại danh sách categories
+            model.addAttribute("categories", categoryDtoList);
             model.addAttribute("blog", blogDto);
             return "admin/blog/create";
         }
@@ -77,7 +79,9 @@ public class AdminBlogController {
                                 @Valid @ModelAttribute("blog") BlogDto blogDto,
                                 BindingResult result, Model model) {
         if (result.hasErrors()) {
-            result.getAllErrors().forEach(error -> System.out.println(error.getDefaultMessage()));
+            List<CategoryDto> categoryDtoList = categoryService.findAllCategories(); // Lấy lại danh sách categories
+            model.addAttribute("categories", categoryDtoList);
+            //result.getAllErrors().forEach(error -> System.out.println(error.getDefaultMessage()));
             model.addAttribute("blog", blogDto);
             return "admin/blog/update";
         }
