@@ -59,21 +59,28 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                       </div>
                       <div class="modal-body">
-                        <form th:action="@{/submitOrder}" id="idForm" method="post">
-                          <div class="form-group">
-                            <label for="amount">Số tiền:</label>
-                            <input type="number" class="form-control" id="amount" name="amount" required value="299999">
+                        <form th:action="@{/submitOrder}" id="idForm" method="post" th:object="${project}">
+                          <div class="form-group mb-3">
+                            <label for="amount">Mã Dự Án:</label>
+                            <input type="number" class="form-control" id="projectId" th:field="*{id}" name="id">
                           </div>
-                          <div class="form-group">
-                            <label for="orderInfo">Thông tin đơn hàng:</label>
-                            <input type="text" class="form-control" id="orderInfo" name="orderInfo" required
-                              value="Thanh toan don hang 2923">
+                          <div class="form-group mb-3">
+                            <label for="amount">Tên Dự Án:</label>
+                            <input type="text" class="form-control" id="projectName" th:field="*{name}" name="name">
+                          </div>
+                          <div class="form-group mb-3">
+                            <label for="amount">Số Tiền:</label>
+                            <input type="number" class="form-control" id="amount" name="amount" required>
+                          </div>
+                          <div class="form-group mb-3">
+                            <label for="orderInfo">Lời Nhắn:</label>
+                            <input type="text" class="form-control" id="orderInfo" name="orderInfo" required>
                           </div>
                         </form>
                       </div>
                       <div class="modal-footer">
-                        <button form="idForm" type="submit" class="btn btn-secondary">Lưu</button>
-                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Hủy</button>
+                        <button form="idForm" type="submit" class="btn btn-primary">Lưu</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
                       </div>
                     </div>
                   </div>

@@ -63,6 +63,12 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    public Project findProjectByIdEntity(long projectId) {
+        Project project = projectRepository.findById(projectId).get();
+        return project;
+    }
+
+    @Override
     public void deleteProjectById(long projectId) {
         projectRepository.deleteById(projectId);
     }
