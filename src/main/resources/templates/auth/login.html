@@ -1,91 +1,62 @@
 <!doctype html>
-<html lang="en">
-
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-
-    <title>SGUCharity</title>
-    <!-- Bootstrap icons-->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet">
-    <link rel="stylesheet" th:href="@{/user/css/bootstrap.min.css}">
-</head>
-
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org">
+<head th:replace="user/fragments/head :: head"></head>
 <body>
-<!-- Navigation-->
-<nav class="navbar navbar-expand-lg navbar-light bg-white">
-    <div class="container px-4 px-lg-5">
-        <a class="navbar-brand fw-bold" href=""><span class="text-primary">SGU</span>Charity</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span
-                class="navbar-toggler-icon"></span></button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-                <li class="nav-item"><a class="nav-link active" aria-current="page" href="{{ url_for('home') }}">Trang Chủ</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="" href="#" role="button" data-bs-toggle="dropdown"
-                       aria-expanded="false">Danh Mục Từ Thiện</a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="">Hỗ trợ học tập</a></li>
-                        <li><a class="dropdown-item" href="">Hỗ trợ sinh hoạt</a></li>
-                        <li><a class="dropdown-item" href="">Hỗ trợ y tế</a></li>
-                    </ul>
-                </li>
-                <li class="nav-item"><a class="nav-link" href="">Chương Trình Từ Thiện</a></li>
-
-            </ul>
-            <a th:href="@{/auth/register}" class="btn btn-secondary mx-2" type="submit">
-                Đăng Ký
-            </a>
-            <a th:href="@{/auth/login}" class="btn btn-primary" type="submit">
-                Đăng Nhập
-            </a>
-        </div>
-    </div>
-</nav>
-
-<div class="container pb-3">
-    <div th:if="${success}" class="alert alert-success">
-        Đăng xuất thành công
-    </div>
-    <div th:if="${error}" class="alert alert-danger">
-        Tên đăng nhập hoặc mật khẩu không đúng
-    </div>
-    <div class="card-body p-4 vh-100 row">
-        <form method="post" th:action="@{/auth/login}" class=" col-lg-6 col-md-9 col-sm-12 mx-auto">
-            <div class="border rounded p-4 ">
-                <h5 class="text-center mb-3">Đăng Nhập</h5>
-                <div class=" form-group mb-3">
-                    <label for="email" class="mb-2">Email</label>
-                    <input class="form-control" type="email" id="email" name="email" required />
-                </div>
-                <div class=" form-group mb-3">
-                    <label for="password" class="mb-2">Mật Khẩu</label>
-                    <input class="form-control" type="password" id="password" name="password" required />
-                </div>
-
-                <div class="pt-2">
-                    <input type="submit" value="Đăng Nhập" class="btn btn-primary">
-                    <a class="btn btn-secondary">Hủy</a>
+    
+    <nav th:replace="user/fragments/nav :: nav"></nav>
+    <section class="vh-100" style="">
+        <div class="container h-100">
+            <div class="row d-flex justify-content-center align-items-center h-100 ">
+                <div class="col col-xl-10">
+                    <div class="card overflow-hidden" style="border-radius: 1rem;">
+                        <div class="row g-0 ">
+                            <div class="col-md-6 col-lg-6 d-none d-md-block ">
+                                <img src="https://xdcs.cdnchinhphu.vn/446259493575335936/2023/7/25/dh-16902723190611350202437.jpg" alt="login form" class="img-fluid " 
+                                    style="
+                                    object-fit: cover;
+                                    max-width: 100%;
+                                    height: 100%;" />
+                            </div>
+                            <div class="col-md-6 col-lg-6 d-flex align-items-center my-3">
+                                <div class="card-body p-4 pt-3 p-lg-5 pt-lg-4 text-black">
+                                    <form th:action="@{/login}" method="post" autocomplete="off">
+                                       
+                                        <div class="d-flex align-items-center mb-4 pb-1 border-bottom border-1 ">
+                                           <p class="fw-bold fs-3"> <span class="text-primary fw-bold ">SGU</span>Charity</p>
+                                        </div>
+                                        <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Đăng nhập vào tài khoản của bạn</h5>
+                                        <label class="mb-2" for="username">Email:</label>
+                                        <input class="form-control" type="text" id="username" name="username" required />
+                                        <br/>
+                                        <label class="mb-2" for="password">Mật Khẩu:</label>
+                                        <input  class="form-control"type="password" id="password" name="password" required />
+                                        <br/>
+                                        <button class="btn btn-primary mt-2"  type="submit">Đăng nhập</button>
+                                    </form>
+                                 
+                                    <div class="mt-4 text-start">
+                                        <!-- <a class="small text-muted">Forgot password?</a> -->
+                                        <p>Bạn chưa có tài khoản? <a href="/register" >Đăng ký</a></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </form>
-    </div>
-</div>
-
-
-<!-- Footer-->
-<footer class="py-3 bg-primary fixed-bottom">
-    <div class="container">
-        <p class="m-0 text-center text-white">Create with <i class="bi bi-heart-fill"></i> by SQGCharity</p>
-    </div>
-</footer>
-<!-- Bootstrap core JS-->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
+        </div>
+    </section>
+    <!-- Hiển thị SweetAlert2 nếu có lỗi -->
+    <script th:if="${param.error}" type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function() {
+            Swal.fire({
+                icon: 'error',
+                title: 'Đăng nhập thất bại!',
+                text: 'Vui lòng kiểm tra lại username và password.',
+                confirmButtonText: 'Đóng'
+            });
+        });
+    </script>
+  
 </body>
-
 </html>

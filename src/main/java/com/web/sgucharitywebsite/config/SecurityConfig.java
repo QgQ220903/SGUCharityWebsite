@@ -36,7 +36,11 @@ public class SecurityConfig {
                     .anyRequest().authenticated())
             .formLogin(form -> form
                     //.successHandler(successHandler))
-                    .defaultSuccessUrl("/home", true))
+              .loginPage("/login") // Trỏ đến URL của trang login
+              .loginProcessingUrl("/login")   
+              .defaultSuccessUrl("/home", true)
+              .failureUrl("/login?error=true") // Thêm tham số error khi login thất bại
+              .permitAll())  // Cho phép truy cập URL của trang login mà không cần authentication)
             .logout(config -> config.logoutSuccessUrl("/home"))
             .build();
   }
