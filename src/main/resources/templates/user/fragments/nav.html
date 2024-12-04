@@ -19,6 +19,9 @@
           </ul>
         </li>
         <li class="nav-item"><a class="nav-link" th:href="@{/project}">Chương Trình Từ Thiện</a></li>
+        <div sec:authorize="hasRole('ADMIN')">
+          <a  th:href="@{/admin/home}" class="nav-link">Quản Lý</a>
+        </div>
 
       </ul>
       <div sec:authorize="!isAuthenticated()">
