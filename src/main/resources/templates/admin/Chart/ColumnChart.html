@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Column Chart</title>
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+</head>
+<body>
+<div id="chartContainer" style="height: 370px; width: 100%;"></div>
+
+<script>
+    // Lấy dữ liệu từ Thymeleaf model
+
+    const dataPointsList = /*[[${dataPointsList}]]*/[];
+
+    // Kiểm tra dữ liệu trong console
+    console.log("Data Points List from Thymeleaf:", dataPointsList);
+
+    // Kiểm tra nếu không có dữ liệu
+    if (!dataPointsList || dataPointsList.length === 0) {
+        console.log("No data available for the chart!");
+    } else
+    {
+        // Tạo danh sách các dataPoints cho biểu đồ
+        const dataSeries = dataPointsList.map(dataPoints => ({
+            type: "column",
+            dataPoints: dataPoints.map(point => ({
+                x: new Date(point.x), // Chuyển timestamp thành Date
+                y: point.y            // Giá trị y
+            }))
+        }));
+
+        // Cấu hình và render biểu đồ
+        const chart = new CanvasJS.Chart("chartContainer", {
+            animationEnabled: true,
+            theme: "light2", // Sử dụng theme sáng
+            title: {
+                text: "Monthly Data Analysis"
+            },
+            axisX: {
+                title: "Date",
+                valueFormatString: "MMM YYYY" // Định dạng tháng/năm
+            },
+            axisY: {
+                title: "Values",
+                includeZero: false
+            },
+            data: dataSeries // Dữ liệu cho biểu đồ
+        });
+
+        chart.render();
+    }
+</script>
+
+</body>
+</html>

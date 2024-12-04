@@ -2,6 +2,7 @@ package com.web.sgucharitywebsite.service.Impl;
 
 import com.web.sgucharitywebsite.dto.CategoryDto;
 import com.web.sgucharitywebsite.dto.ProjectDto;
+import com.web.sgucharitywebsite.entity.AppUser;
 import com.web.sgucharitywebsite.entity.Category;
 import com.web.sgucharitywebsite.entity.Project;
 import com.web.sgucharitywebsite.repository.AppUserRepository;
@@ -21,7 +22,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Autowired
     public ProjectServiceImpl(CategoryRepository categoryRepository, AppUserRepository appUserRepository,
-            ProjectRepository projectRepository) {
+                              ProjectRepository projectRepository) {
         this.categoryRepository = categoryRepository;
         this.appUserRepository = appUserRepository;
         this.projectRepository = projectRepository;
@@ -35,10 +36,20 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    public List<Object[]> getProjectsAndAmount() {
+        return projectRepository.findAll()
+                .stream()
+                .map(project -> new Object[]{project.getName(), project.getCurrentAmount()})
+                .toList();
+    }
+
+    @Override
     public void createProject(ProjectDto projectDto) {
         Category category = categoryRepository.findById(projectDto.getCategoryId()).get();
+        AppUser user = appUserRepository.findById(projectDto.getUserId()).get();
         Project project = mapToProject(projectDto);
         project.setCategory(category);
+        project.setUser(user);
         projectRepository.save(project);
     }
 
@@ -51,8 +62,19 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public void updateProject(ProjectDto projectDto) {
         Category category = categoryRepository.findById(projectDto.getCategoryId()).get();
+        AppUser user = appUserRepository.findById(projectDto.getUserId()).get();
         Project project = mapToProject(projectDto);
         project.setCategory(category);
+        project.setUser(user);
+        projectRepository.save(project);
+    }
+
+    @Override
+    public void updateProjectEntity(Project project) {
+        Category category = categoryRepository.findById(project.getCategory().getId()).get();
+        AppUser user = appUserRepository.findById(project.getUser().getId()).get();
+        project.setCategory(category);
+        project.setUser(user);
         projectRepository.save(project);
     }
 
@@ -60,6 +82,12 @@ public class ProjectServiceImpl implements ProjectService {
     public ProjectDto findProjectById(long projectId) {
         Project project = projectRepository.findById(projectId).get();
         return mapToProjectDto(project);
+    }
+
+    @Override
+    public Project findProjectByIdEntity(long projectId) {
+        Project project = projectRepository.findById(projectId).get();
+        return project;
     }
 
     @Override
@@ -97,6 +125,7 @@ public class ProjectServiceImpl implements ProjectService {
                 .createOn(project.getCreateOn())
                 .updateOn(project.getUpdateOn())
                 .categoryId(project.getCategory().getId())
+                .userId(project.getUser().getId())
                 .build();
     }
 }

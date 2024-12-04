@@ -9,6 +9,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 import java.time.LocalDate;
 @Data
 @Builder
@@ -40,5 +42,7 @@ public class Project {
     @ManyToOne
     @JoinColumn(name="user_id", nullable = false)
     private AppUser user;
+    @OneToMany(mappedBy = "project", cascade = CascadeType.REMOVE)
+    private Set<Transaction> transactions = new HashSet<>();
  
 }
