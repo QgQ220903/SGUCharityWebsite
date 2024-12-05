@@ -10,4 +10,7 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
     // Truy vấn số lượng dự án theo thể loại
     @Query("SELECT p.category.name, COUNT(p) FROM Project p GROUP BY p.category")
     List<Object[]> countProjectsByCategory();
+    // Lấy ra tổng số lượng dự án
+    @Query("SELECT COUNT(*) FROM Project")
+    int countAllProjects();
 }

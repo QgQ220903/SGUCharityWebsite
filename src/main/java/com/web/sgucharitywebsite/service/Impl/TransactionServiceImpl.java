@@ -1,8 +1,10 @@
 package com.web.sgucharitywebsite.service.Impl;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import com.web.sgucharitywebsite.entity.Transaction;
@@ -27,6 +29,17 @@ public class TransactionServiceImpl implements TransactionService {
   public List<Transaction> findAllTransaction() {
     List<Transaction> transactions = transactionRepository.findAll();
     return transactions;
+  }
+
+  @Override
+  public Double findTotalDonationAmount() {
+    return transactionRepository.findTotalDonationAmount();
+  }
+
+  @Override
+  public Double findTotalDonationAmountBetweenDates(@Param("startDate") LocalDateTime startDate,
+      @Param("endDate") LocalDateTime endDate) {
+    return transactionRepository.findTotalDonationAmountBetweenDates(startDate, endDate);
   }
 
 }

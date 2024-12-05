@@ -22,7 +22,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Autowired
     public ProjectServiceImpl(CategoryRepository categoryRepository, AppUserRepository appUserRepository,
-                              ProjectRepository projectRepository) {
+            ProjectRepository projectRepository) {
         this.categoryRepository = categoryRepository;
         this.appUserRepository = appUserRepository;
         this.projectRepository = projectRepository;
@@ -39,7 +39,7 @@ public class ProjectServiceImpl implements ProjectService {
     public List<Object[]> getProjectsAndAmount() {
         return projectRepository.findAll()
                 .stream()
-                .map(project -> new Object[]{project.getName(), project.getCurrentAmount()})
+                .map(project -> new Object[] { project.getName(), project.getCurrentAmount() })
                 .toList();
     }
 
@@ -127,5 +127,16 @@ public class ProjectServiceImpl implements ProjectService {
                 .categoryId(project.getCategory().getId())
                 .userId(project.getUser().getId())
                 .build();
+    }
+
+    @Override
+    public int countAllProjects() {
+        return projectRepository.countAllProjects();
+    }
+
+    @Override
+    public List<Object[]> countProjectsByCategory() {
+        // TODO Auto-generated method stub
+        return projectRepository.countProjectsByCategory();
     }
 }

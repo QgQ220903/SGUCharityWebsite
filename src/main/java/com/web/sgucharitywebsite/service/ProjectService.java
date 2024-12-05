@@ -10,12 +10,24 @@ import java.util.List;
 public interface ProjectService {
 
     void createProject(ProjectDto projectDto);
+
     List<ProjectDto> findAllProjects();
+
     void updateProject(ProjectDto projectDto);
+
     void updateProjectEntity(Project project);
+
     ProjectDto findProjectById(long projectId);
+
     Project findProjectByIdEntity(long projectId);
+
     void deleteProjectById(long projectId);
+
     Project saveProject(ProjectDto projectDto);
+
     List<Object[]> getProjectsAndAmount();
+
+    int countAllProjects();
+
+    List<Object[]> countProjectsByCategory();
 }

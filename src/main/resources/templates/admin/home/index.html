@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head th:replace="admin/fragments/head :: head"></head>
+
 <body class="hold-transition sidebar-mini">
     <div class="wrapper">
 
@@ -37,7 +38,7 @@
                             <!-- small box -->
                             <div class="small-box bg-danger">
                                 <div class="inner">
-                                    <h3>65</h3>
+                                    <h3 id="countProject">0</h3>
                                     <p>Tổng Số Dự Án</p>
                                 </div>
                                 <div class="icon">
@@ -49,7 +50,7 @@
                             <!-- small box -->
                             <div class="small-box bg-warning">
                                 <div class="inner">
-                                    <h3>44</h3>
+                                    <h3 id="countUsers">0</h3>
                                     <p>Tổng Số Người Dùng</p>
                                 </div>
                                 <div class="icon">
@@ -61,7 +62,7 @@
                             <!-- small box -->
                             <div class="small-box bg-success">
                                 <div class="inner">
-                                    <h3>53<sup style="font-size: 20px">%</sup></h3>
+                                    <h3 id="totalDonation">0</h3>
 
                                     <p>Tổng Số Tiền Quyên Góp</p>
                                 </div>
@@ -75,23 +76,67 @@
                     <h2>Thống kê dự án theo thể loại</h2>
                     <div class="d-flex align-items-center justify-content-center">
                         <div class="w-50 ">
-                            <canvas id="myPieChart"  ></canvas>
+                            <canvas id="myPieChart"></canvas>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Số Lượng Dự Án Theo Danh Mục</h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Danh Mục</th>
+                                            <th>Số Lượng Dự Án</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="data : ${projectData}">
+                                            <td th:text="${data[0]}"></td>
+                                            <td th:text="${data[1]}"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
 
 
 
 
-                    <div class="d-flex gap-2 mt-3">
-                        <div class="w-50 ">
+
+                    <div class="d-flex gap-2 mt-3 mb-3">
+                        <div class="w-100">
                             <h5>Thống kê Số tiền quyên góp theo từng dự án</h5>
                             <canvas id="myBarChart" width="400" height="200"></canvas>
                         </div>
-                        <div class="w-50">
+                    </div>
 
-                            <h5>Số tiền quyên góp theo thời gian</h5>
-                            <canvas id="myLineChart" width="400" height="200"></canvas>
+                    <div class="">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <h5>Số tiền quyên góp theo thời gian</h5>
+                            </div>
+                            <div class="col-lg-6 mb-3">
+                                <label>Từ Ngày:</label>
+                                <input id="startDateInput" type="date" class="form-control">
+                            </div>
+                            <div class="col-lg-6 mb-3">
+                                <label>Đến Ngày:</label>
+                                <input id="endDateInput" type="date" class="form-control">
+                            </div>
+                            <div class="col-lg-6 mb-3">
+                                <button id="getDonationByTime" class="btn btn-primary">Xem Thống Kê</button>
+                            </div>
+
                         </div>
+                        <div class="col-12">
+                            <div class="w-100">
+                                <canvas id="myLineChart" width="400" height="200"></canvas>
+                            </div>
+                        </div>
+
                     </div>
 
 
@@ -238,6 +283,115 @@
 
     <div th:replace="admin/fragments/script :: script"></div>
     <script th:src="@{/admin/dist/js/home.js}"></script>
+    <script>
+        function countProjects() {
+            $.ajax({
+                url: "/api/countAllProjects",
+                type: "GET",
+                success: function (data) {
+                    // Hiển thị số lượng dự án lên thẻ p có id là countProject
+                    $("#countProject").text(data);
+                },
+                error: function (error) {
+                    console.error("Lỗi khi lấy dữ liệu: ", error);
+                }
+            });
+        }
+        function countUsers() {
+            $.ajax({
+                url: "/api/countAllUsers",
+                type: "GET",
+                success: function (data) {
+                    // Hiển thị số lượng dự án lên thẻ p có id là countProject
+                    $("#countUsers").text(data);
+                },
+                error: function (error) {
+                    console.error("Lỗi khi lấy dữ liệu: ", error);
+                }
+            });
+        }
+        function totalDonation() {
+            $.ajax({
+                url: "/api/total-donation",
+                type: "GET",
+                success: function (data) {
+                    // Hiển thị số lượng dự án lên thẻ p có id là countProject
+                    $("#totalDonation").text(data);
+                },
+                error: function (error) {
+                    console.error("Lỗi khi lấy dữ liệu: ", error);
+                }
+            });
+        }
+
+        function getTotalDonationAmount(startDate, endDate) {
+            // Thực hiện AJAX request với thời gian bắt đầu và kết thúc được truyền vào hàm
+            $.ajax({
+                url: '/api/donations/total',
+                data: {
+                    startDate: startDate + 'T00:00:00',
+                    endDate: endDate + 'T23:59:59'
+                },
+                success: function (data) {
+                    // Sử dụng dữ liệu trả về để cập nhật biểu đồ
+                    const labels = data.map(item => item.date);
+                    const values = data.map(item => item.totalAmount);
+
+                    // Cập nhật dữ liệu cho biểu đồ
+                    myLineChart.data.labels = labels;
+                    myLineChart.data.datasets[0].data = values;
+
+                    // Cập nhật lại biểu đồ
+                    myLineChart.update();
+                }
+            });
+        }
+        // // Lắng nghe sự kiện click trên nút có id là 'updateChartButton'
+        // document.getElementById('getDonationByTime').addEventListener('click', function () {
+        //     // Lấy ngày bắt đầu và kết thúc từ hai input và gọi hàm getTotalDonationAmount
+        //     const startDate = document.getElementById('startDateInput').value;
+        //     const endDate = document.getElementById('endDateInput').value;
+        //     getTotalDonationAmount(startDate, endDate);
+        // });
+        function convertToIsoString(dateString) {
+            const date = new Date(dateString);
+            const isoString = date.toISOString().slice(0, 19).replace('T', ' ');
+            return isoString;
+        }
+        // Lắng nghe sự kiện khi nhấn nút xem
+        document.getElementById('getDonationByTime').addEventListener('click', function () {
+            const startDate = convertToIsoString(document.getElementById('startDateInput').value);
+            const endDate = convertToIsoString(document.getElementById('endDateInput').value);
+
+            // Gửi yêu cầu AJAX đến API với các tham số ngày bắt đầu và kết thúc
+            $.ajax({
+                url: '/api/donations/total',
+                method: 'GET',
+                data: { startDate: startDate, endDate: endDate },
+                success: function (data) {
+                    // Cập nhật biểu đồ khi nhận được dữ liệu từ API
+                    updateChart(data);
+                },
+                error: function (err) {
+                    console.error('Lỗi khi gửi yêu cầu API: ', err);
+                }
+            });
+        });
+
+        function updateChart(data) {
+            // Cập nhật dữ liệu cho biểu đồ
+            myLineChart.data.labels = data.labels; // Các nhãn trục x
+            myLineChart.data.datasets[0].data = data.values; // Dữ liệu của dataset
+
+            // Vẽ lại biểu đồ
+            myLineChart.update();
+        }
+
+
+        countProjects();
+        countUsers();
+        totalDonation();
+    </script>
 
 </body>
 

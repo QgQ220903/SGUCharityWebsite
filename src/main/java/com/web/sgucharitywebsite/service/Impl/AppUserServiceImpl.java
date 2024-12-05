@@ -103,4 +103,11 @@ public class AppUserServiceImpl implements UserDetailsService, AppUserService {
     AppUser appUser = appUserRepository.findByEmail(email);
     return appUser;
   }
+
+  @Override
+  public int countAllUsers()
+
+  {
+    return appUserRepository.countAllUsers();
+  }
 }

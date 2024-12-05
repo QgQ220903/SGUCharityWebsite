@@ -27,4 +27,6 @@ public interface AppUserService {
 
   void deleteAppUserById(long appUserId);
 
+  int countAllUsers();
+
 }
