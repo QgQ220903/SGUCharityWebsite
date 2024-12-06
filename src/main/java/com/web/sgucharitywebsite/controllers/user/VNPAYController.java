@@ -4,6 +4,7 @@ import com.web.sgucharitywebsite.dto.ProjectDto;
 import com.web.sgucharitywebsite.entity.AppUser;
 import com.web.sgucharitywebsite.entity.Project;
 import com.web.sgucharitywebsite.entity.Transaction;
+import com.web.sgucharitywebsite.repository.helper.CurrencyFormatter;
 import com.web.sgucharitywebsite.service.AppUserService;
 import com.web.sgucharitywebsite.service.ProjectService;
 import com.web.sgucharitywebsite.service.TransactionService;
@@ -18,9 +19,11 @@ import org.springframework.stereotype.Controller;
 import com.web.sgucharitywebsite.config.VNPAYService;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.web.util.HtmlUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.security.Principal;
 import java.time.LocalDateTime;
 
@@ -57,6 +60,7 @@ public class VNPAYController {
 
     @GetMapping("/vnpay-payment")
     public String GetMapping(HttpServletRequest request, Model model) throws UnsupportedEncodingException {
+        request.setCharacterEncoding("UTF-8");
         int paymentStatus = vnPayService.orderReturn(request);
 
         String orderInfo = request.getParameter("vnp_OrderInfo");
@@ -86,8 +90,10 @@ public class VNPAYController {
         transactionService.createTransaction(transaction);
         project.setCurrentAmount(project.getCurrentAmount() + transaction.getVnpAmount());
         projectService.updateProjectEntity(project);
+        // Format số tiền sang chuỗi VND
+        String formattedAmount = CurrencyFormatter.formatToVND(transaction.getVnpAmount());
         model.addAttribute("orderId", orderInfo);
-        model.addAttribute("totalPrice", transaction.getVnpAmount());
+        model.addAttribute("totalPrice", formattedAmount);
         model.addAttribute("paymentTime", transaction.getVnpPayDate());
         model.addAttribute("transactionId", transactionId);
 
