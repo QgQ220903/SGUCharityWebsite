@@ -10,6 +10,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 
 @Configuration
 @EnableWebSecurity
@@ -34,10 +36,16 @@ public class SecurityConfig {
                     .requestMatchers("/admin","/admin/**").hasRole("ADMIN")
 
                     .anyRequest().authenticated())
+            .oauth2Login(oauth2 -> oauth2
+                    .loginPage("/login")  // Trỏ đến URL của trang login
+                    .loginProcessingUrl("/login/oauth2/code/google")  // URL xử lý callback từ Google OAuth2
+                    .defaultSuccessUrl("/home", true)  // Chuyển hướng đến /home sau khi đăng nhập bằng Google
+                    .failureUrl("/login?error=google_error")  // Thêm tham số error khi login thất bại
+                    .permitAll())
             .formLogin(form -> form
                     //.successHandler(successHandler))
               .loginPage("/login") // Trỏ đến URL của trang login
-              .loginProcessingUrl("/login")   
+              .loginProcessingUrl("/login")
               .defaultSuccessUrl("/home", true)
               .failureUrl("/login?error=true") // Thêm tham số error khi login thất bại
               .permitAll())  // Cho phép truy cập URL của trang login mà không cần authentication)

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
+import java.util.Map;
 import java.util.List;
 
 @Controller
@@ -33,11 +34,24 @@ public class HomeController {
     }
     @GetMapping({ "/", "/home" })
     public String home(Model model, Principal principal) {
+        // Kiểm tra nếu người dùng đã đăng nhập
         if (principal != null) {
-            String email = principal.getName();
-            AppUser appUser = appUserRepository.findByEmail(email);
-            model.addAttribute("user", appUser);
+            // Kiểm tra nếu người dùng đăng nhập qua OAuth2 (ví dụ: Google)
+            if (principal instanceof org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken oauth2Token) {
+                // Trích xuất thông tin email từ Google
+                Map<String, Object> attributes = oauth2Token.getPrincipal().getAttributes();
+                String email = (String) attributes.get("email");
+                model.addAttribute("userEmail", email);
+            } else {
+                // Trường hợp người dùng đăng nhập qua form login
+                String email = principal.getName();  // Đây là tên người dùng từ form login
+                model.addAttribute("userEmail", email);
+            }
+        } else {
+            // Nếu người dùng chưa đăng nhập, hiển thị là khách
+            model.addAttribute("userEmail", "Guest");
         }
+
         List<CategoryDto> categoryDtoList = categoryService.findAllCategories();
         model.addAttribute("categories", categoryDtoList);
         return "homepage";
