@@ -4,6 +4,8 @@ import com.web.sgucharitywebsite.dto.CategoryDto;
 import com.web.sgucharitywebsite.dto.ProjectDto;
 import com.web.sgucharitywebsite.entity.Category;
 import com.web.sgucharitywebsite.entity.Project;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -26,9 +28,10 @@ public interface ProjectService {
     Project saveProject(ProjectDto projectDto);
 
     List<Object[]> getProjectsAndAmount();
-    List<ProjectDto> findByCategory_Id(Long categoryId);
+    Page<ProjectDto> findByCategory_Id(Long categoryId,Pageable pageable);
 
     int countAllProjects();
 
     List<Object[]> countProjectsByCategory();
+    Page<ProjectDto> findAll(Pageable pageable);
 }
