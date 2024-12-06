@@ -62,11 +62,13 @@
                         <form th:action="@{/submitOrder}" id="idForm" method="post" th:object="${project}">
                           <div class="form-group mb-3">
                             <label for="amount">Mã Dự Án:</label>
-                            <input type="number" class="form-control" id="projectId" th:field="*{id}" name="id">
+                            <input type="number" class="form-control" id="projectId" th:field="*{id}" name="id"
+                              readonly>
                           </div>
                           <div class="form-group mb-3">
                             <label for="amount">Tên Dự Án:</label>
-                            <input type="text" class="form-control" id="projectName" th:field="*{name}" name="name">
+                            <input type="text" class="form-control" id="projectName" th:field="*{name}" name="name"
+                              readonly>
                           </div>
                           <div class="form-group mb-3">
                             <label for="amount">Số Tiền:</label>
@@ -74,7 +76,8 @@
                           </div>
                           <div class="form-group mb-3">
                             <label for="orderInfo">Lời Nhắn:</label>
-                            <input type="text" class="form-control" id="orderInfo" name="orderInfo" required>
+                            <input type="text" pattern="[a-zA-Z0-9 ]+" placeholder="Chỉ nhập chữ và số"
+                              class="form-control" id="orderInfo" name="orderInfo" required>
                           </div>
                         </form>
                       </div>
