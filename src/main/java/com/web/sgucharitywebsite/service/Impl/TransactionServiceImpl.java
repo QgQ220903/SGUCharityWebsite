@@ -37,9 +37,19 @@ public class TransactionServiceImpl implements TransactionService {
   }
 
   @Override
-  public Double findTotalDonationAmountBetweenDates(@Param("startDate") LocalDateTime startDate,
+  public List<Object[]> findDailyDonationAmountBetweenDates(@Param("startDate") LocalDateTime startDate,
       @Param("endDate") LocalDateTime endDate) {
-    return transactionRepository.findTotalDonationAmountBetweenDates(startDate, endDate);
+    return transactionRepository.findDailyDonationAmountBetweenDates(startDate, endDate);
+  }
+
+  @Override
+  public List<Transaction> findByOrderByVnpPayDateDesc() {
+    return transactionRepository.findByOrderByVnpPayDateDesc();
+  }
+
+  @Override
+  public List<Transaction> findTranSactionByEmail(String email) {
+    return transactionRepository.findTranSactionByEmail(email);
   }
 
 }

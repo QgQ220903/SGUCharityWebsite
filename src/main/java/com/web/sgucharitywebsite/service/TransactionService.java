@@ -12,6 +12,7 @@ import java.util.List;
 import org.springframework.data.repository.query.Param;
 
 public interface TransactionService {
+  List<Transaction> findByOrderByVnpPayDateDesc();
 
   void createTransaction(Transaction transaction);
 
@@ -19,6 +20,8 @@ public interface TransactionService {
 
   Double findTotalDonationAmount();
 
-  Double findTotalDonationAmountBetweenDates(@Param("startDate") LocalDateTime startDate,
+  List<Object[]> findDailyDonationAmountBetweenDates(@Param("startDate") LocalDateTime startDate,
       @Param("endDate") LocalDateTime endDate);
+
+  List<Transaction> findTranSactionByEmail(String email);
 }

@@ -29,6 +29,8 @@ public class Transaction {
     @Column(name = "vnp_Amount")
     private Double vnpAmount;
     @ManyToOne
-    @JoinColumn(name="project_id", nullable = false)
+    @JoinColumn(name = "project_id", nullable = false)
     private Project project;
+    @Column(name = "email")
+    private String email;
 }

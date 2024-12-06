@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org">
+
+<head th:replace="user/fragments/head :: head"></head>
+
+<body>
+  <!-- Navigation-->
+  <nav th:replace="user/fragments/nav :: nav"></nav>
+
+  <!-- hero -->
+  <div class="container col-xxl-8 px-4 ">
+    <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
+      <div class="col-12">
+        <div class="card-body" id="userDataTableWrapper">
+          <table id="userDataTable" class="table table-bordered table-hover">
+            <thead>
+              <tr>
+                <th>Mã giao dịch</th>
+                <th>Nội Dung Giao Dịch</th>
+                <th>Thời Gian Giao Dịch</th>
+                <th>Số Tiền Giao Dịch</th>
+                <th>Dự Án</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="transaction : ${transactions}">
+                <td th:text="${transaction.vnpTransactionNo}"></td>
+                <td th:text="${transaction.vnpOrderInfo}"></td>
+                <td th:text="${transaction.vnpPayDate}"></td>
+                <td th:text="${transaction.vnpAmount}"></td>
+                <td th:text="${transaction.project.name}"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <footer th:replace="user/fragments/footer :: footer"></footer>
+  <div th:replace="user/fragments/scripts :: scripts"></div>
+
+</body>
+
+</html>

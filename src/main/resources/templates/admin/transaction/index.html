@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:replace="admin/fragments/head :: head"></head>
+
+<body class="hold-transition sidebar-mini">
+  <div class="wrapper">
+
+    <nav th:replace="admin/fragments/nav :: nav"></nav>
+
+    <aside th:replace="admin/fragments/aside :: aside"></aside>
+
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <div class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-6">
+              <h1 class="m-0">Quản Lý Giao Dịch</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+              <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="#">Trang Chủ</a></li>
+                <li class="breadcrumb-item active">Quản Lý Giao Dịch</li>
+              </ol>
+            </div><!-- /.col -->
+          </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+      </div>
+      <!-- /.content-header -->
+
+      <!-- Main content -->
+      <section class="content">
+        <div class="container-fluid">
+          <!-- Main row -->
+          <div class="row">
+            <div class="col-12">
+
+              <div class="card">
+                <div class="d-flex justify-content-between align-items-center px-3 pt-3">
+                  <h3 class="card-title">Danh Sách Giao Dịch</h3>
+                  <!-- <a href="/admin/user/create" class="btn btn-primary">
+                                        <i class="bi bi-plus-circle-fill"></i> Thêm Mới Người Dùng
+                                    </a> -->
+                </div>
+                <hr class="mx-0 mt-2 mb-1">
+                <!-- /.card-header -->
+                <div class="card-body" id="userDataTableWrapper">
+                  <table id="userDataTable" class="table table-bordered table-hover">
+                    <thead>
+                      <tr>
+                        <th>Mã giao dịch</th>
+                        <th>Nội Dung Giao Dịch</th>
+                        <th>Thời Gian Giao Dịch</th>
+                        <th>Số Tiền Giao Dịch</th>
+                        <th>Dự Án</th>
+                        <th>Người Chuyểnn</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr th:each="transaction : ${transactions}">
+                        <td th:text="${transaction.vnpTransactionNo}"></td>
+                        <td th:text="${transaction.vnpOrderInfo}"></td>
+                        <td th:text="${transaction.vnpPayDate}"></td>
+                        <td th:text="${transaction.vnpAmount}"></td>
+                        <td th:text="${transaction.project.name}"></td>
+                        <td th:text="${transaction.email}"></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <!-- /.card-body -->
+              </div>
+              <!-- /.card -->
+            </div>
+          </div>
+          <!-- /.row (main row) -->
+        </div><!-- /.container-fluid -->
+      </section>
+      <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+
+    <!-- Main Footer -->
+    <footer th:replace="admin/fragments/footer :: footer"></footer>
+  </div>
+  <!-- ./wrapper -->
+
+  <!-- REQUIRED SCRIPTS -->
+
+  <div th:replace="admin/fragments/script :: script"></div>
+  <script th:src="@{/admin/dist/js/user.js}"></script>
+
+</body>
+
+</html>

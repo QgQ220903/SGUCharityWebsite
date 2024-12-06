@@ -15,7 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
@@ -59,12 +63,21 @@ public class ChartRestController {
         return CurrencyFormatter.formatToVND(transactionService.findTotalDonationAmount());
     }
 
-    @GetMapping("/api/donations/total")
-    public ResponseEntity<Double> getTotalDonationAmount(
+    @GetMapping("/api/donations/daily")
+    public ResponseEntity<List<Map<String, Object>>> getDailyDonations(
             @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
             @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
-        Double totalAmount = transactionService.findTotalDonationAmountBetweenDates(startDate, endDate);
-        return ResponseEntity.ok(totalAmount);
+        List<Object[]> dailyDonations = transactionService.findDailyDonationAmountBetweenDates(startDate, endDate);
+
+        // Chuyển đổi kết quả Object[] thành Map để dễ dàng sử dụng trong frontend
+        List<Map<String, Object>> result = dailyDonations.stream().map(item -> {
+            Map<String, Object> map = new HashMap<>();
+            map.put("date", item[0]);
+            map.put("totalAmount", item[1]);
+            return map;
+        }).collect(Collectors.toList());
+
+        return ResponseEntity.ok(result);
     }
 
 }

@@ -244,28 +244,7 @@
                                 console.error('Error fetching data:', error);  // Xử lý lỗi khi fetch dữ liệu
                             });
 
-                        // Line Chart
-                        var ctxLine = document.getElementById('myLineChart').getContext('2d');
-                        var myLineChart = new Chart(ctxLine, {
-                            type: 'line', // Chọn loại biểu đồ là Line
-                            data: {
-                                labels: ['January', 'February', 'March', 'April'], // Các mốc thời gian
-                                datasets: [{
-                                    label: 'Donations Over Time ($)', // Tên cho bộ dữ liệu
-                                    data: [500, 1000, 1500, 2000], // Dữ liệu theo thời gian
-                                    fill: false, // Không tô màu dưới đường
-                                    borderColor: 'rgba(75, 192, 192, 1)', // Màu của đường
-                                    tension: 0.1 // Độ cong của đường
-                                }]
-                            },
-                            options: {
-                                scales: {
-                                    y: {
-                                        beginAtZero: true // Đảm bảo trục Y bắt đầu từ 0
-                                    }
-                                }
-                            }
-                        });
+
                     </script>
                 </div><!-- /.container-fluid -->
             </div>
@@ -355,22 +334,44 @@
         // });
         function convertToIsoString(dateString) {
             const date = new Date(dateString);
-            const isoString = date.toISOString().slice(0, 19).replace('T', ' ');
-            return isoString;
+            // Kết quả: 'YYYY-MM-DDTHH:mm:ss'
+            return date.toISOString().slice(0, 19);
         }
-        // Lắng nghe sự kiện khi nhấn nút xem
+        var ctxLine = document.getElementById('myLineChart').getContext('2d');
+        var myLineChart = new Chart(ctxLine, {
+            type: 'line', // Loại biểu đồ là Line
+            data: {
+                labels: [], // Danh sách nhãn (ngày)
+                datasets: [{
+                    label: 'Donations Over Time ($)', // Tên bộ dữ liệu
+                    data: [], // Dữ liệu ban đầu trống
+                    fill: false, // Không tô màu dưới đường
+                    borderColor: 'rgba(75, 192, 192, 1)', // Màu đường
+                    tension: 0.1 // Độ cong của đường
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true // Đảm bảo trục Y bắt đầu từ 0
+                    }
+                }
+            }
+        });
         document.getElementById('getDonationByTime').addEventListener('click', function () {
             const startDate = convertToIsoString(document.getElementById('startDateInput').value);
             const endDate = convertToIsoString(document.getElementById('endDateInput').value);
 
             // Gửi yêu cầu AJAX đến API với các tham số ngày bắt đầu và kết thúc
             $.ajax({
-                url: '/api/donations/total',
+                url: '/api/donations/daily',
                 method: 'GET',
                 data: { startDate: startDate, endDate: endDate },
                 success: function (data) {
                     // Cập nhật biểu đồ khi nhận được dữ liệu từ API
-                    updateChart(data);
+                    console.log(data); // Kiểm tra dữ liệu trước khi cập nhật
+
+                    updateLineChart(data); // Truyền dữ liệu JSON trực tiếp vào hàm cập nhật biểu đồ
                 },
                 error: function (err) {
                     console.error('Lỗi khi gửi yêu cầu API: ', err);
@@ -378,13 +379,28 @@
             });
         });
 
-        function updateChart(data) {
-            // Cập nhật dữ liệu cho biểu đồ
-            myLineChart.data.labels = data.labels; // Các nhãn trục x
-            myLineChart.data.datasets[0].data = data.values; // Dữ liệu của dataset
+        // Hàm cập nhật dữ liệu lên biểu đồ line chart
+        function updateLineChart(data) {
+            // Kiểm tra dữ liệu từ API
+            if (Array.isArray(data) && data.length > 0) {
+                // Parse dữ liệu JSON nếu cần
+                if (typeof data === 'string') {
+                    data = JSON.parse(data);
+                }
 
-            // Vẽ lại biểu đồ
-            myLineChart.update();
+                // Tạo mảng labels và values từ dữ liệu API
+                var labels = data.map(item => item.date); // Lấy ra danh sách ngày
+                var values = data.map(item => item.totalAmount); // Lấy ra danh sách số tiền
+
+                // Cập nhật dữ liệu cho biểu đồ
+                myLineChart.data.labels = labels; // Các nhãn trục x (ngày)
+                myLineChart.data.datasets[0].data = values; // Dữ liệu (số tiền)
+
+                // Vẽ lại biểu đồ
+                myLineChart.update();
+            } else {
+                console.error("Dữ liệu không hợp lệ");
+            }
         }
 
 

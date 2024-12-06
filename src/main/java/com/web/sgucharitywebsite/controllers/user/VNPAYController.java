@@ -34,11 +34,15 @@ public class VNPAYController {
     private VNPAYService vnPayService;
     private TransactionService transactionService;
     private ProjectService projectService;
+    private AppUserService appUserService;
     private int projectId;
     private String projectName;
 
     @Autowired
-    public VNPAYController(TransactionService transactionService, ProjectService projectService, VNPAYService vnPayService) {
+    public VNPAYController(TransactionService transactionService,
+            ProjectService projectService,
+            VNPAYService vnPayService,
+            AppUserService appUserService) {
         this.transactionService = transactionService;
         this.projectService = projectService;
         this.vnPayService = vnPayService;
@@ -59,8 +63,8 @@ public class VNPAYController {
     }
 
     @GetMapping("/vnpay-payment")
-    public String GetMapping(HttpServletRequest request, Model model) throws UnsupportedEncodingException {
-        request.setCharacterEncoding("UTF-8");
+    public String GetMapping(HttpServletRequest request, Model model, Principal principal)
+            throws UnsupportedEncodingException {
         int paymentStatus = vnPayService.orderReturn(request);
 
         String orderInfo = request.getParameter("vnp_OrderInfo");
@@ -74,8 +78,13 @@ public class VNPAYController {
         System.out.println("Nội dung giao dịch: " + request.getParameter("vnp_OrderInfo"));
         System.out.println("Dự án giao dịch: " + this.projectId);
         System.out.println("Dự án giao dịch: " + this.projectName);
+        System.out.println("Trạng thái giao dịch: " + request.getParameter("vnp_TransactionStatus"));
 
         Transaction transaction = new Transaction();
+        if (principal != null) {
+            String email = principal.getName();
+            transaction.setEmail(email);
+        }
 
         transaction.setVnpAmount(Double.valueOf(request.getParameter("vnp_Amount")) / 100);
         transaction.setVnpOrderInfo(request.getParameter("vnp_OrderInfo"));
@@ -83,6 +92,11 @@ public class VNPAYController {
         LocalDateTime now = LocalDateTime.now();
         transaction.setVnpPayDate(now);
         transaction.setVnpTransactionNo(request.getParameter("vnp_TransactionNo"));
+        if (request.getParameter("vnp_TransactionStatus").equals("00")) {
+            transaction.setVnpOrderStatus("Success");
+        } else {
+            transaction.setVnpOrderStatus("Fail");
+        }
 
         Project project = projectService.findProjectByIdEntity(this.projectId);
 
