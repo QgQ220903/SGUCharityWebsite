@@ -100,8 +100,7 @@ public class AppUserServiceImpl implements UserDetailsService, AppUserService {
 
   @Override
   public AppUser findAppUserByEmail(String email) {
-    AppUser appUser = appUserRepository.findByEmail(email);
-    return appUser;
+    return appUserRepository.findByEmail(email);
   }
 
   @Override

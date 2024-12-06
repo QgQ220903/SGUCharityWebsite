@@ -27,7 +27,7 @@
                 <td th:text="${transaction.vnpTransactionNo}"></td>
                 <td th:text="${transaction.vnpOrderInfo}"></td>
                 <td th:text="${transaction.vnpPayDate}"></td>
-                <td th:text="${transaction.vnpAmount}"></td>
+                <td th:text="${transaction.getFormattedAmount}"></td>
                 <td th:text="${transaction.project.name}"></td>
               </tr>
             </tbody>
@@ -40,6 +40,8 @@
 
   <footer th:replace="user/fragments/footer :: footer"></footer>
   <div th:replace="user/fragments/scripts :: scripts"></div>
+  <div th:replace="admin/fragments/script :: script"></div>
+  <script th:src="@{/admin/dist/js/user.js}"></script>
 
 </body>
 

@@ -84,6 +84,8 @@ public class VNPAYController {
         if (principal != null) {
             String email = principal.getName();
             transaction.setEmail(email);
+        } else {
+            transaction.setEmail("Ẩn Danh");
         }
 
         transaction.setVnpAmount(Double.valueOf(request.getParameter("vnp_Amount")) / 100);

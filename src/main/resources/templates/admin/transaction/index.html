@@ -64,7 +64,7 @@
                         <td th:text="${transaction.vnpTransactionNo}"></td>
                         <td th:text="${transaction.vnpOrderInfo}"></td>
                         <td th:text="${transaction.vnpPayDate}"></td>
-                        <td th:text="${transaction.vnpAmount}"></td>
+                        <td th:text="${transaction.getFormattedAmount}"></td>
                         <td th:text="${transaction.project.name}"></td>
                         <td th:text="${transaction.email}"></td>
                       </tr>

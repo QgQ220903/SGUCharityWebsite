@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+import com.web.sgucharitywebsite.repository.helper.CurrencyFormatter;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -33,4 +35,8 @@ public class Transaction {
     private Project project;
     @Column(name = "email")
     private String email;
+
+    public String getFormattedAmount() {
+        return CurrencyFormatter.formatToVND(vnpAmount);
+    }
 }
