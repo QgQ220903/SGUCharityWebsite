@@ -2,10 +2,13 @@ package com.web.sgucharitywebsite.controllers.admin;
 
 import com.web.sgucharitywebsite.dto.BlogDto;
 import com.web.sgucharitywebsite.dto.CategoryDto;
+import com.web.sgucharitywebsite.entity.AppUser;
+import com.web.sgucharitywebsite.repository.AppUserRepository;
 import com.web.sgucharitywebsite.repository.helper.ImgStorage;
 import com.web.sgucharitywebsite.service.BlogService;
 import com.web.sgucharitywebsite.service.CategoryService;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -21,19 +25,31 @@ import java.util.List;
 public class AdminBlogController {
     private BlogService blogService;
     private CategoryService categoryService;
+    @Autowired
+    private AppUserRepository appUserRepository;
 
     public AdminBlogController(BlogService blogService, CategoryService categoryService) {
         this.blogService = blogService;
         this.categoryService = categoryService;
     }
     @RequestMapping("/blog")
-    public String adminBlog(Model model) {
+    public String adminBlog(Model model, Principal principal) {
+        if (principal != null) {
+            String email = principal.getName();
+            AppUser appUser = appUserRepository.findByEmail(email);
+            model.addAttribute("user", appUser);
+        }
         List<BlogDto> blogDtoList = blogService.findAllBlogs();
         model.addAttribute("blogs", blogDtoList);
         return "admin/blog/index";
     }
     @GetMapping("/blog/create")
-    public String createBlogForm(Model model) {
+    public String createBlogForm(Model model, Principal principal) {
+        if (principal != null) {
+            String email = principal.getName();
+            AppUser appUser = appUserRepository.findByEmail(email);
+            model.addAttribute("user", appUser);
+        }
         BlogDto blogDto = new BlogDto();
         model.addAttribute("blog", blogDto);
         List<CategoryDto> categoryDtoList = categoryService.findAllCategories();
@@ -43,7 +59,12 @@ public class AdminBlogController {
 
     @PostMapping("/blog/create")
     public String saveBlog(@Valid @ModelAttribute("blog") BlogDto blogDto, BindingResult result,
-                              Model model, RedirectAttributes redirectAttributes) {
+                              Model model, RedirectAttributes redirectAttributes, Principal principal) {
+        if (principal != null) {
+            String email = principal.getName();
+            AppUser appUser = appUserRepository.findByEmail(email);
+            model.addAttribute("user", appUser);
+        }
         if (result.hasErrors()) {
             List<CategoryDto> categoryDtoList = categoryService.findAllCategories(); // Lấy lại danh sách categories
             model.addAttribute("categories", categoryDtoList);
@@ -66,7 +87,12 @@ public class AdminBlogController {
         return "redirect:/admin/blog";
     }
     @GetMapping("/blog/update/{blogId}")
-    public String updateBlog(@PathVariable("blogId") long blogId, Model model) {
+    public String updateBlog(@PathVariable("blogId") long blogId,Model model, Principal principal) {
+        if (principal != null) {
+            String email = principal.getName();
+            AppUser appUser = appUserRepository.findByEmail(email);
+            model.addAttribute("user", appUser);
+        }
         BlogDto blogDto = blogService.findBlogById(blogId);
         model.addAttribute("blog", blogDto);
         List<CategoryDto> categoryDtoList = categoryService.findAllCategories();
@@ -77,7 +103,12 @@ public class AdminBlogController {
     @PostMapping("/blog/update/{blogId}")
     public String updateBlog(@PathVariable("blogId") long blogId,
                                 @Valid @ModelAttribute("blog") BlogDto blogDto,
-                                BindingResult result, Model model) {
+                                BindingResult result,Model model, Principal principal) {
+        if (principal != null) {
+            String email = principal.getName();
+            AppUser appUser = appUserRepository.findByEmail(email);
+            model.addAttribute("user", appUser);
+        }
         if (result.hasErrors()) {
             List<CategoryDto> categoryDtoList = categoryService.findAllCategories(); // Lấy lại danh sách categories
             model.addAttribute("categories", categoryDtoList);
@@ -106,13 +137,23 @@ public class AdminBlogController {
         return "redirect:/admin/blog";
     }
     @GetMapping("/blog/detail/{blogId}")
-    public String detail(@PathVariable("blogId") long blogId, Model model) {
+    public String detail(@PathVariable("blogId") long blogId,Model model, Principal principal) {
+        if (principal != null) {
+            String email = principal.getName();
+            AppUser appUser = appUserRepository.findByEmail(email);
+            model.addAttribute("user", appUser);
+        }
         BlogDto blogDto = blogService.findBlogById(blogId);
         model.addAttribute("blog", blogDto);
         return "admin/blog/detail";
     }
     @GetMapping("/blog/delete/{blogId}")
-    public String delete(@PathVariable("blogId") long blogId, Model model) {
+    public String delete(@PathVariable("blogId") long blogId,Model model, Principal principal) {
+        if (principal != null) {
+            String email = principal.getName();
+            AppUser appUser = appUserRepository.findByEmail(email);
+            model.addAttribute("user", appUser);
+        }
         blogService.deleteBlogById(blogId);
         return "redirect:/admin/blog";
     }

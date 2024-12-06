@@ -10,18 +10,28 @@
         <li class="nav-item"><a class="nav-link active" aria-current="page" th:href="@{/home}">Trang Chủ</a>
         </li>
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" id="" href="#" role="button" data-bs-toggle="dropdown"
-             aria-expanded="false">Danh Mục Từ Thiện</a>
+          <a class="nav-link dropdown-toggle" id="navbarDropdown" href="" role="button" data-bs-toggle="dropdown"
+             aria-expanded="false">Danh Mục Từ Thiện </a>
+<!--          <select class="form-control" onchange="window.location.href=this.options[this.selectedIndex].getAttribute('data-url')">-->
+<!--            <option th:each="category : ${categories}"-->
+<!--                    th:value="${category.id}"-->
+<!--                    th:text="${category.name}"-->
+<!--                    th:data-url="@{/project-category/{id}(id=${category.id})}">-->
+<!--            </option>-->
+<!--          </select>-->
+
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="">Hỗ trợ học tập</a></li>
-            <li><a class="dropdown-item" href="">Hỗ trợ sinh hoạt</a></li>
-            <li><a class="dropdown-item" href="">Hỗ trợ y tế</a></li>
+            <li th:each="category : ${categories}">
+              <a class="dropdown-item" th:href="@{/project-category/{id}(id=${category.id})}" th:text="${category.name}"></a>
+            </li>
           </ul>
+
         </li>
         <li class="nav-item"><a class="nav-link" th:href="@{/project}">Chương Trình Từ Thiện</a></li>
         <div sec:authorize="hasRole('ADMIN')">
           <a  th:href="@{/admin/home}" class="nav-link">Quản Lý</a>
         </div>
+
 
       </ul>
       <div sec:authorize="!isAuthenticated()">

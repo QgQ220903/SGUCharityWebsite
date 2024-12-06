@@ -70,6 +70,11 @@ public class AdminProjectController {
     public String saveProject(@Valid @ModelAttribute("project") ProjectDto projectDto,
                               BindingResult result, Model model,
                               RedirectAttributes redirectAttributes, Principal principal) {
+        if (principal != null) {
+            String email = principal.getName();
+            AppUser appUser = appUserRepository.findByEmail(email);
+            model.addAttribute("user", appUser);
+        }
         if (result.hasErrors()) {
             List<CategoryDto> categoryDtoList = categoryService.findAllCategories();
             model.addAttribute("categories", categoryDtoList);
@@ -106,7 +111,12 @@ public class AdminProjectController {
 
 
     @GetMapping("/project/update/{projectId}")
-    public String updateProject(@PathVariable("projectId") long projectId, Model model) {
+    public String updateProject(@PathVariable("projectId") long projectId, Model model, Principal principal) {
+        if (principal != null) {
+            String email = principal.getName();
+            AppUser appUser = appUserRepository.findByEmail(email);
+            model.addAttribute("user", appUser);
+        }
         ProjectDto projectDto = projectService.findProjectById(projectId);
         model.addAttribute("project", projectDto);
         List<CategoryDto> categoryDtoList = categoryService.findAllCategories();
@@ -121,6 +131,11 @@ public class AdminProjectController {
     public String updateProject(@PathVariable("projectId") long projectId,
                                 @Valid @ModelAttribute("project") ProjectDto projectDto,
                                 BindingResult result, Model model, Principal principal) {
+        if (principal != null) {
+            String email = principal.getName();
+            AppUser appUser = appUserRepository.findByEmail(email);
+            model.addAttribute("user", appUser);
+        }
         if (result.hasErrors()) {
             List<CategoryDto> categoryDtoList = categoryService.findAllCategories();
             model.addAttribute("categories", categoryDtoList);
@@ -161,14 +176,24 @@ public class AdminProjectController {
     }
 
     @GetMapping("/project/detail/{projectId}")
-    public String detail(@PathVariable("projectId") long projectId, Model model) {
+    public String detail(@PathVariable("projectId") long projectId, Model model, Principal principal) {
+        if (principal != null) {
+            String email = principal.getName();
+            AppUser appUser = appUserRepository.findByEmail(email);
+            model.addAttribute("user", appUser);
+        }
         ProjectDto projectDto = projectService.findProjectById(projectId);
         model.addAttribute("project", projectDto);
         return "admin/project/detail";
     }
 
     @GetMapping("/project/delete/{projectId}")
-    public String delete(@PathVariable("projectId") long projectId, Model model) {
+    public String delete(@PathVariable("projectId") long projectId, Model model, Principal principal) {
+        if (principal != null) {
+            String email = principal.getName();
+            AppUser appUser = appUserRepository.findByEmail(email);
+            model.addAttribute("user", appUser);
+        }
         projectService.deleteProjectById(projectId);
         return "redirect:/admin/project";
     }

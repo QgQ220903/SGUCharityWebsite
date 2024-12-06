@@ -11,6 +11,8 @@ import com.web.sgucharitywebsite.repository.ProjectRepository;
 import com.web.sgucharitywebsite.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,6 +43,19 @@ public class ProjectServiceImpl implements ProjectService {
                 .stream()
                 .map(project -> new Object[]{project.getName(), project.getCurrentAmount()})
                 .toList();
+    }
+
+    @Override
+    public List<ProjectDto> findByCategory_Id(Long categoryId) {
+        List<Project> projects=projectRepository.findByCategory_Id(categoryId);
+        List<ProjectDto> projectDtoList=new ArrayList<>();
+        for (Project project : projects) {
+            // Sử dụng hàm mapToProject để chuyển đổi
+            ProjectDto projectDto = mapToProjectDto(project);
+            // Thêm ProjectDto đã chuyển đổi vào danh sách
+            projectDtoList.add(projectDto);
+        }
+        return projectDtoList;
     }
 
     @Override

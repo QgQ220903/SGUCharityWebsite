@@ -49,19 +49,43 @@ public class ProjectController {
         if (principal != null) {
             String email = principal.getName();
             AppUser appUser = appUserRepository.findByEmail(email);
+            List<CategoryDto> categoryDtoList = categoryService.findAllCategories();
             model.addAttribute("user", appUser);
+            model.addAttribute("categories", categoryDtoList);
         }
         List<ProjectDto> projectDtoList = projectService.findAllProjects();
+        List<CategoryDto> categoryDtoList = categoryService.findAllCategories();
         model.addAttribute("projects", projectDtoList);
+        model.addAttribute("categories", categoryDtoList);
         return "project-list";
     }
+
+    @GetMapping("/project-category/{id}")
+    public String projectcategory(@PathVariable("id") long categoryId,Model model, Principal principal) {
+        if (principal != null) {
+            String email = principal.getName();
+            AppUser appUser = appUserRepository.findByEmail(email);
+            //List<CategoryDto> categoryDtoList = categoryService.findAllCategories();
+            model.addAttribute("user", appUser);
+            //model.addAttribute("categories", categoryDtoList);
+        }
+        List<ProjectDto> projectDtoList = projectService.findByCategory_Id(categoryId);
+        List<CategoryDto> categoryDtoList = categoryService.findAllCategories();
+        model.addAttribute("projects", projectDtoList);
+        model.addAttribute("categories", categoryDtoList);
+        System.out.println("Categories: " + categoryDtoList);
+        return "project-list";
+    }
+
 
     @GetMapping("/project/{id}")
     public String detail(Model model, Principal principal) {
         if (principal != null) {
             String email = principal.getName();
             AppUser appUser = appUserRepository.findByEmail(email);
+            List<CategoryDto> categoryDtoList = categoryService.findAllCategories();
             model.addAttribute("user", appUser);
+            model.addAttribute("categories", categoryDtoList);
         }
         return "project-detail";
     }
@@ -71,10 +95,14 @@ public class ProjectController {
         if (principal != null) {
             String email = principal.getName();
             AppUser appUser = appUserRepository.findByEmail(email);
+            List<CategoryDto> categoryDtoList = categoryService.findAllCategories();
             model.addAttribute("user", appUser);
+            model.addAttribute("categories", categoryDtoList);
         }
+        List<CategoryDto> categoryDtoList = categoryService.findAllCategories();
         ProjectDto projectDto = projectService.findProjectById(projectId);
         model.addAttribute("project", projectDto);
+        model.addAttribute("categories", categoryDtoList);
         return "project-detail";
     }
 
