@@ -1,7 +1,9 @@
 package com.web.sgucharitywebsite.controllers.admin;
 
 import com.web.sgucharitywebsite.dto.CategoryDto;
+import com.web.sgucharitywebsite.entity.AppUser;
 import com.web.sgucharitywebsite.entity.Category;
+import com.web.sgucharitywebsite.repository.AppUserRepository;
 import com.web.sgucharitywebsite.service.CategoryService;
 
 import jakarta.servlet.http.HttpSession;
@@ -13,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -22,21 +25,32 @@ public class AdminCategoryController {
     private CategoryService categoryService;
     @Autowired
     private HttpSession httpSession;
-
+    @Autowired
+    private AppUserRepository appUserRepository;
     @Autowired
     public AdminCategoryController(CategoryService categoryService) {
         this.categoryService = categoryService;
     }
 
     @RequestMapping("/admin/category")
-    public String adminCategory(Model model) {
+    public String adminCategory(Model model, Principal principal) {
+        if (principal != null) {
+            String email = principal.getName();
+            AppUser appUser = appUserRepository.findByEmail(email);
+            model.addAttribute("user", appUser);
+        }
         List<CategoryDto> categoryDtoList = categoryService.findAllCategories();
         model.addAttribute("categories", categoryDtoList);
         return "admin/category/index";
     }
 
     @GetMapping("/admin/category/create")
-    public String createCategoryForm(Model model) {
+    public String createCategoryForm(Model model, Principal principal) {
+        if (principal != null) {
+            String email = principal.getName();
+            AppUser appUser = appUserRepository.findByEmail(email);
+            model.addAttribute("user", appUser);
+        }
         Category category = new Category();
         model.addAttribute("category", category);
         return "admin/category/create";
@@ -44,7 +58,12 @@ public class AdminCategoryController {
 
     @PostMapping("/admin/category/create")
     public String saveCategory(@Valid @ModelAttribute("category") CategoryDto categoryDto, BindingResult result,
-            Model model, RedirectAttributes redirectAttributes) {
+            Model model, RedirectAttributes redirectAttributes, Principal principal) {
+        if (principal != null) {
+            String email = principal.getName();
+            AppUser appUser = appUserRepository.findByEmail(email);
+            model.addAttribute("user", appUser);
+        }
         if (result.hasErrors()) {
             model.addAttribute("category", categoryDto);
             return "admin/category/create";
@@ -55,7 +74,12 @@ public class AdminCategoryController {
     }
 
     @GetMapping("/admin/category/update/{categoryId}")
-    public String updateCategory(@PathVariable("categoryId") long categoryId, Model model) {
+    public String updateCategory(@PathVariable("categoryId") long categoryId,Model model, Principal principal) {
+        if (principal != null) {
+            String email = principal.getName();
+            AppUser appUser = appUserRepository.findByEmail(email);
+            model.addAttribute("user", appUser);
+        }
         CategoryDto categoryDto = categoryService.findCategoryById(categoryId);
         model.addAttribute("category", categoryDto);
         return "admin/category/update";
@@ -64,7 +88,12 @@ public class AdminCategoryController {
     @PostMapping("/admin/category/update/{categoryId}")
     public String updateCategory(@PathVariable("categoryId") long categoryId,
             @Valid @ModelAttribute("category") CategoryDto categoryDto,
-            BindingResult result) {
+            BindingResult result,Model model, Principal principal) {
+        if (principal != null) {
+            String email = principal.getName();
+            AppUser appUser = appUserRepository.findByEmail(email);
+            model.addAttribute("user", appUser);
+        }
         if (result.hasErrors()) {
             return "admin/category/update";
         }
@@ -74,14 +103,24 @@ public class AdminCategoryController {
     }
 
     @GetMapping("/admin/category/detail/{categoryId}")
-    public String detail(@PathVariable("categoryId") long categoryId, Model model) {
+    public String detail(@PathVariable("categoryId") long categoryId, Model model, Principal principal) {
+        if (principal != null) {
+            String email = principal.getName();
+            AppUser appUser = appUserRepository.findByEmail(email);
+            model.addAttribute("user", appUser);
+        }
         CategoryDto categoryDto = categoryService.findCategoryById(categoryId);
         model.addAttribute("category", categoryDto);
         return "admin/category/detail";
     }
 
     @GetMapping("/admin/category/delete/{categoryId}")
-    public String delete(@PathVariable("categoryId") long categoryId, Model model) {
+    public String delete(@PathVariable("categoryId") long categoryId, Model model, Principal principal) {
+        if (principal != null) {
+            String email = principal.getName();
+            AppUser appUser = appUserRepository.findByEmail(email);
+            model.addAttribute("user", appUser);
+        }
         categoryService.deleteCategoryById(categoryId);
         return "redirect:/admin/category";
     }

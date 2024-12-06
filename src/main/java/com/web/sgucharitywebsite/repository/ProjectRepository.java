@@ -13,4 +13,5 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
     // Lấy ra tổng số lượng dự án
     @Query("SELECT COUNT(*) FROM Project")
     int countAllProjects();
+    List<Project> findByCategory_Id(Long categoryId);
 }

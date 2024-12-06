@@ -14,8 +14,8 @@
             <div class="image">
                 <img th:src="@{/admin/dist/img/user2-160x160.jpg}" class="img-circle elevation-2" alt="User Image">
             </div>
-            <div class="info">
-                <a href="#" class="d-block">Quach Quy</a>
+            <div class="info" sec:authorize="isAuthenticated()">
+                <a href="#" class="d-block" th:text="${user.email}" >Quach Quy</a>
             </div>
         </div>
 

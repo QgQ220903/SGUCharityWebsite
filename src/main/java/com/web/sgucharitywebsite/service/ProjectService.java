@@ -26,6 +26,7 @@ public interface ProjectService {
     Project saveProject(ProjectDto projectDto);
 
     List<Object[]> getProjectsAndAmount();
+    List<ProjectDto> findByCategory_Id(Long categoryId);
 
     int countAllProjects();
 

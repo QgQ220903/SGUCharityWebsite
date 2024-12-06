@@ -1,6 +1,9 @@
 package com.web.sgucharitywebsite.controllers.admin;
 
+import java.security.Principal;
 import java.util.List;
+
+import com.web.sgucharitywebsite.repository.AppUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -24,21 +27,32 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class AdminUserController {
 
   private AppUserService appUserService;
-
+  @Autowired
+  private AppUserRepository appUserRepository;
   @Autowired
   public AdminUserController(AppUserService appUserService) {
     this.appUserService = appUserService;
   }
 
   @GetMapping({ "", "/user", "/user/index" })
-  public String index(Model model) {
+  public String index(Model model, Principal principal) {
+    if (principal != null) {
+      String email = principal.getName();
+      AppUser appUser = appUserRepository.findByEmail(email);
+      model.addAttribute("user", appUser);
+    }
     List<RegistrationDto> appUserList = appUserService.findAllAppUser();
     model.addAttribute("appUsers", appUserList);
     return "admin/user/index";
   }
 
   @GetMapping("/user/create")
-  public String create(Model model) {
+  public String create(Model model, Principal principal) {
+    if (principal != null) {
+      String email = principal.getName();
+      AppUser appUser = appUserRepository.findByEmail(email);
+      model.addAttribute("user", appUser);
+    }
     RegistrationDto registrationDto = new RegistrationDto();
     model.addAttribute("registrationDto", registrationDto);
     return "admin/user/create";
@@ -47,7 +61,12 @@ public class AdminUserController {
   @PostMapping("/user/create")
   public String create(Model model,
       @Valid @ModelAttribute RegistrationDto registrationDto,
-      BindingResult result) {
+      BindingResult result, Principal principal) {
+    if (principal != null) {
+      String email = principal.getName();
+      AppUser appUser = appUserRepository.findByEmail(email);
+      model.addAttribute("user", appUser);
+    }
     AppUser existingUser = appUserService.findAppUserByEmail(registrationDto.getEmail());
     if (existingUser != null) {
       result.addError(new FieldError("registrationDto", "email", "Email đã có người sử dụng"));
@@ -68,21 +87,36 @@ public class AdminUserController {
   }
 
   @GetMapping("/user/delete/{userId}")
-  public String delete(@PathVariable("userId") long userId, Model model) {
+  public String delete(@PathVariable("userId") long userId,Model model, Principal principal) {
+    if (principal != null) {
+      String email = principal.getName();
+      AppUser appUser = appUserRepository.findByEmail(email);
+      model.addAttribute("user", appUser);
+    }
     appUserService.deleteAppUserById(userId);
     model.addAttribute("message", "Xóa người dùng thành công!");
     return "redirect:/admin/user";
   }
 
   @GetMapping("/user/update/{userId}")
-  public String update(@PathVariable("userId") long userId, Model model) {
+  public String update(@PathVariable("userId") long userId,Model model, Principal principal) {
+    if (principal != null) {
+      String email = principal.getName();
+      AppUser appUser = appUserRepository.findByEmail(email);
+      model.addAttribute("user", appUser);
+    }
     RegistrationDto registrationDto = appUserService.findAppUserById(userId);
     model.addAttribute("registrationDto", registrationDto);
     return "admin/user/update";
   }
 
   @GetMapping("/user/detail/{userId}")
-  public String detail(@PathVariable("userId") long userId, Model model) {
+  public String detail(@PathVariable("userId") long userId, Model model, Principal principal) {
+    if (principal != null) {
+      String email = principal.getName();
+      AppUser appUser = appUserRepository.findByEmail(email);
+      model.addAttribute("user", appUser);
+    }
     RegistrationDto registrationDto = appUserService.findAppUserById(userId);
     model.addAttribute("registrationDto", registrationDto);
     return "admin/user/detail";
@@ -91,7 +125,12 @@ public class AdminUserController {
   @PostMapping("/user/update/{userId}")
   public String update(@PathVariable("userId") long userId,
       @Valid @ModelAttribute("registrationDto") RegistrationDto registrationDto,
-      BindingResult result) {
+      BindingResult result,Model model, Principal principal) {
+    if (principal != null) {
+      String email = principal.getName();
+      AppUser appUser = appUserRepository.findByEmail(email);
+      model.addAttribute("user", appUser);
+    }
     if (result.hasErrors()) {
       return "admin/user/update";
     }
