@@ -9,7 +9,10 @@ import com.web.sgucharitywebsite.repository.AppUserRepository;
 import com.web.sgucharitywebsite.repository.CategoryRepository;
 import com.web.sgucharitywebsite.repository.ProjectRepository;
 import com.web.sgucharitywebsite.service.ProjectService;
+import jakarta.persistence.Id;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -46,16 +49,26 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public List<ProjectDto> findByCategory_Id(Long categoryId) {
-        List<Project> projects=projectRepository.findByCategory_Id(categoryId);
-        List<ProjectDto> projectDtoList=new ArrayList<>();
-        for (Project project : projects) {
-            // Sử dụng hàm mapToProject để chuyển đổi
-            ProjectDto projectDto = mapToProjectDto(project);
-            // Thêm ProjectDto đã chuyển đổi vào danh sách
-            projectDtoList.add(projectDto);
-        }
-        return projectDtoList;
+    public Page<ProjectDto> findByCategory_Id(Long categoryId,Pageable pageable) {
+        Page<Project> projects = projectRepository.findByCategory_Id(categoryId,pageable);
+        //List<Project> projects=projectRepository.findByCategory_Id(categoryId);
+        return
+                projects.map(project ->ProjectDto.builder()
+                        .id(project.getId())
+                        .name(project.getName())
+                        .content(project.getContent())
+                        .startTime(project.getStartTime())
+                        .endTime(project.getEndTime())
+                        .targetAmount(project.getTargetAmount())
+                        .currentAmount(project.getCurrentAmount())
+                        .status(project.getStatus())
+                        .thumbnail(project.getThumbnail())
+                        .createOn(project.getCreateOn())
+                        .updateOn(project.getUpdateOn())
+                        .categoryId(project.getCategory().getId())
+                        .userId(project.getUser().getId())
+                        .build()
+                );
     }
 
     @Override
@@ -153,5 +166,28 @@ public class ProjectServiceImpl implements ProjectService {
     public List<Object[]> countProjectsByCategory() {
         // TODO Auto-generated method stub
         return projectRepository.countProjectsByCategory();
+    }
+
+    @Override
+    public Page<ProjectDto> findAll(Pageable pageable) {
+        Page<Project> projects = projectRepository.findAll(pageable);
+
+        return
+                projects.map(project ->ProjectDto.builder()
+                        .id(project.getId())
+                        .name(project.getName())
+                        .content(project.getContent())
+                        .startTime(project.getStartTime())
+                        .endTime(project.getEndTime())
+                        .targetAmount(project.getTargetAmount())
+                        .currentAmount(project.getCurrentAmount())
+                        .status(project.getStatus())
+                        .thumbnail(project.getThumbnail())
+                        .createOn(project.getCreateOn())
+                        .updateOn(project.getUpdateOn())
+                        .categoryId(project.getCategory().getId())
+                        .userId(project.getUser().getId())
+                        .build()
+                );
     }
 }

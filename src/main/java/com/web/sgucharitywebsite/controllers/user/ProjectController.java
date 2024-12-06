@@ -1,13 +1,13 @@
 package com.web.sgucharitywebsite.controllers.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -44,36 +44,65 @@ public class ProjectController {
         this.vnpayService = vnpayService;
     }
 
+//    @GetMapping("/project")
+//    public String home(Model model, Principal principal) {
+//        if (principal != null) {
+//            String email = principal.getName();
+//            AppUser appUser = appUserRepository.findByEmail(email);
+//            model.addAttribute("user", appUser);
+//        }
+//        List<ProjectDto> projectDtoList = projectService.findAllProjects();
+//        List<CategoryDto> categoryDtoList = categoryService.findAllCategories();
+//        model.addAttribute("projects", projectDtoList);
+//        model.addAttribute("categories", categoryDtoList);
+//        return "project-list";
+//    }
+
     @GetMapping("/project")
-    public String home(Model model, Principal principal) {
+    public String home(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "4") int size,
+            Model model,
+            Principal principal
+    ) {
         if (principal != null) {
             String email = principal.getName();
             AppUser appUser = appUserRepository.findByEmail(email);
-            List<CategoryDto> categoryDtoList = categoryService.findAllCategories();
             model.addAttribute("user", appUser);
-            model.addAttribute("categories", categoryDtoList);
+
         }
-        List<ProjectDto> projectDtoList = projectService.findAllProjects();
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<ProjectDto> projectPage = projectService.findAll(pageable);
         List<CategoryDto> categoryDtoList = categoryService.findAllCategories();
-        model.addAttribute("projects", projectDtoList);
+
+        model.addAttribute("projects", projectPage.getContent());
+        model.addAttribute("currentPage", projectPage.getNumber());
+        model.addAttribute("totalPages", projectPage.getTotalPages());
         model.addAttribute("categories", categoryDtoList);
         return "project-list";
     }
 
     @GetMapping("/project-category/{id}")
-    public String projectcategory(@PathVariable("id") long categoryId,Model model, Principal principal) {
+    public String projectcategory(@PathVariable("id") long categoryId,
+                                  @RequestParam(defaultValue = "0") int page,
+                                  @RequestParam(defaultValue = "4") int size,
+                                  Model model,
+                                  Principal principal
+    ) {
         if (principal != null) {
             String email = principal.getName();
             AppUser appUser = appUserRepository.findByEmail(email);
-            //List<CategoryDto> categoryDtoList = categoryService.findAllCategories();
             model.addAttribute("user", appUser);
-            //model.addAttribute("categories", categoryDtoList);
         }
-        List<ProjectDto> projectDtoList = projectService.findByCategory_Id(categoryId);
+        Pageable pageable = PageRequest.of(page, size);
+        Page<ProjectDto> projectPage = projectService.findByCategory_Id(categoryId,pageable);
         List<CategoryDto> categoryDtoList = categoryService.findAllCategories();
-        model.addAttribute("projects", projectDtoList);
+        model.addAttribute("projects", projectPage.getContent());
+        model.addAttribute("currentPage", projectPage.getNumber());
+        model.addAttribute("totalPages", projectPage.getTotalPages());
         model.addAttribute("categories", categoryDtoList);
-        System.out.println("Categories: " + categoryDtoList);
+        System.out.println("Categories: " + projectPage.getTotalPages());
         return "project-list";
     }
 
