@@ -37,6 +37,9 @@
                                     <div class="mt-4 text-start">
                                         <!-- <a class="small text-muted">Forgot password?</a> -->
                                         <p>Bạn chưa có tài khoản? <a href="/register" >Đăng ký</a></p>
+                                        <a href="/oauth2/authorization/google">
+                                            <button>Đăng nhập bằng Google</button>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -47,12 +50,22 @@
         </div>
     </section>
     <!-- Hiển thị SweetAlert2 nếu có lỗi -->
-    <script th:if="${param.error}" type="text/javascript">
+<!--    <script th:if="${param.error}" type="text/javascript">-->
+<!--        document.addEventListener("DOMContentLoaded", function() {-->
+<!--            Swal.fire({-->
+<!--                icon: 'error',-->
+<!--                title: 'Đăng nhập thất bại!',-->
+<!--                text: 'Vui lòng kiểm tra lại username và password.',-->
+<!--                confirmButtonText: 'Đóng'-->
+<!--            });-->
+<!--        });-->
+<!--    </script>-->
+    <script th:if="${param.error == 'google_error'}" type="text/javascript">
         document.addEventListener("DOMContentLoaded", function() {
             Swal.fire({
                 icon: 'error',
-                title: 'Đăng nhập thất bại!',
-                text: 'Vui lòng kiểm tra lại username và password.',
+                title: 'Đăng nhập Google thất bại!',
+                text: 'Có lỗi xảy ra khi đăng nhập bằng Google. Vui lòng thử lại.',
                 confirmButtonText: 'Đóng'
             });
         });

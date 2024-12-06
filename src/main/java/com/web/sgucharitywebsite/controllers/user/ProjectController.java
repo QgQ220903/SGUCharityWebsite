@@ -25,6 +25,7 @@ import jakarta.validation.Valid;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class ProjectController {
@@ -47,9 +48,20 @@ public class ProjectController {
     @GetMapping("/project")
     public String home(Model model, Principal principal) {
         if (principal != null) {
-            String email = principal.getName();
-            AppUser appUser = appUserRepository.findByEmail(email);
-            model.addAttribute("user", appUser);
+            // Kiểm tra nếu người dùng đăng nhập qua OAuth2 (ví dụ: Google)
+            if (principal instanceof org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken oauth2Token) {
+                // Trích xuất thông tin email từ Google
+                Map<String, Object> attributes = oauth2Token.getPrincipal().getAttributes();
+                String email = (String) attributes.get("email");
+                model.addAttribute("userEmail", email);
+            } else {
+                // Trường hợp người dùng đăng nhập qua form login
+                String email = principal.getName();  // Đây là tên người dùng từ form login
+                model.addAttribute("userEmail", email);
+            }
+        } else {
+            // Nếu người dùng chưa đăng nhập, hiển thị là khách
+            model.addAttribute("userEmail", "Guest");
         }
         List<ProjectDto> projectDtoList = projectService.findAllProjects();
         model.addAttribute("projects", projectDtoList);
@@ -69,9 +81,20 @@ public class ProjectController {
     @GetMapping("/project/detail/{id}")
     public String getMethodName(@PathVariable("id") long projectId, Model model, Principal principal) {
         if (principal != null) {
-            String email = principal.getName();
-            AppUser appUser = appUserRepository.findByEmail(email);
-            model.addAttribute("user", appUser);
+            // Kiểm tra nếu người dùng đăng nhập qua OAuth2 (ví dụ: Google)
+            if (principal instanceof org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken oauth2Token) {
+                // Trích xuất thông tin email từ Google
+                Map<String, Object> attributes = oauth2Token.getPrincipal().getAttributes();
+                String email = (String) attributes.get("email");
+                model.addAttribute("userEmail", email);
+            } else {
+                // Trường hợp người dùng đăng nhập qua form login
+                String email = principal.getName();  // Đây là tên người dùng từ form login
+                model.addAttribute("userEmail", email);
+            }
+        } else {
+            // Nếu người dùng chưa đăng nhập, hiển thị là khách
+            model.addAttribute("userEmail", "Guest");
         }
         ProjectDto projectDto = projectService.findProjectById(projectId);
         model.addAttribute("project", projectDto);
@@ -112,15 +135,24 @@ public class ProjectController {
         if (principal == null) {
             return "redirect:/login";
         }
-        String email = principal.getName();
-        AppUser appUser = appUserRepository.findByEmail(email);
-        model.addAttribute("user", appUser);
+        if (principal instanceof org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken oauth2Token) {
+            // Trích xuất thông tin email từ Google
+            Map<String, Object> attributes = oauth2Token.getPrincipal().getAttributes();
+            String email = (String) attributes.get("email");
+            model.addAttribute("userEmail", email);
+        } else {
+            // Trường hợp người dùng đăng nhập qua form login
+            String email = principal.getName();  // Đây là tên người dùng từ form login
+            model.addAttribute("userEmail", email);
+        }
+
         ProjectDto projectDto = new ProjectDto();
         model.addAttribute("project", projectDto);
         List<CategoryDto> categoryDtoList = categoryService.findAllCategories();
         model.addAttribute("categories", categoryDtoList);
         return "createProject";
     }
+
 
     @PostMapping("/project/create")
     public String saveProject(@Valid @ModelAttribute("project") ProjectDto projectDto,
@@ -137,13 +169,35 @@ public class ProjectController {
 
         // Lấy userId từ AppUser đã đăng nhập
         if (principal != null) {
-            String email = principal.getName();
-            AppUser appUser = appUserRepository.findByEmail(email);
-            if (appUser != null) {
-                projectDto.setUserId(appUser.getId());  // Gán userId vào ProjectDto
+            if (principal instanceof org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken oauth2Token) {
+                // Trích xuất thông tin từ Google
+                Map<String, Object> attributes = oauth2Token.getPrincipal().getAttributes();
+                String email = (String) attributes.get("email");
+
+                // Kiểm tra xem người dùng đã tồn tại trong cơ sở dữ liệu chưa
+                AppUser appUser = appUserRepository.findByEmail(email);  // Tìm người dùng qua email
+
+                if (appUser == null) {
+                    // Nếu người dùng chưa tồn tại, tạo người dùng mới và lưu vào DB
+                    appUser = new AppUser();
+                    appUser.setEmail(email);
+                    appUser.setFullName((String) attributes.get("name")); // Bạn có thể lấy tên từ Google nếu có
+                    appUser.setRole("USER");
+                    appUser = appUserRepository.save(appUser);  // Lưu người dùng vào DB
+                }
+
+                // Gán userId vào ProjectDto
+                projectDto.setUserId(appUser.getId());  // Lấy userId của người dùng và gán vào ProjectDto
             } else {
-                model.addAttribute("error", "User not found.");
-                return "createProject";
+                // Trường hợp người dùng đăng nhập qua form login
+                String email = principal.getName();  // Email từ form login
+                AppUser appUser = appUserRepository.findByEmail(email);
+                if (appUser != null) {
+                    projectDto.setUserId(appUser.getId());  // Gán userId vào ProjectDto
+                } else {
+                    model.addAttribute("error", "User not found.");
+                    return "createProject";
+                }
             }
         }
 
@@ -155,7 +209,7 @@ public class ProjectController {
                 projectDto.setThumbnail(imagePath); // Cập nhật đường dẫn vào DTO
             } catch (IOException ex) {
                 model.addAttribute("error", "Failed to upload the file.");
-                return "/project/create";
+                return "createProject";
             }
         }
 
@@ -164,5 +218,7 @@ public class ProjectController {
         redirectAttributes.addFlashAttribute("success", "Project created successfully!");
         return "redirect:/project";
     }
+
+
 
 }
