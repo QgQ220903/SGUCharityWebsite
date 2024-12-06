@@ -60,7 +60,12 @@ public class ProjectController {
 //    }
 
     @GetMapping("/project")
-    public String home(Model model, Principal principal) {
+    public String home(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "4") int size,
+            Model model,
+            Principal principal
+    ) {
         if (principal != null) {
             // Kiểm tra nếu người dùng đăng nhập qua OAuth2 (ví dụ: Google)
             if (principal instanceof org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken oauth2Token) {
@@ -77,8 +82,47 @@ public class ProjectController {
             // Nếu người dùng chưa đăng nhập, hiển thị là khách
             model.addAttribute("userEmail", "Guest");
         }
-        List<ProjectDto> projectDtoList = projectService.findAllProjects();
-        model.addAttribute("projects", projectDtoList);
+        Pageable pageable = PageRequest.of(page, size);
+        Page<ProjectDto> projectPage = projectService.findAll(pageable);
+        List<CategoryDto> categoryDtoList = categoryService.findAllCategories();
+
+        model.addAttribute("projects", projectPage.getContent());
+        model.addAttribute("currentPage", projectPage.getNumber());
+        model.addAttribute("totalPages", projectPage.getTotalPages());
+        model.addAttribute("categories", categoryDtoList);
+        return "project-list";
+    }
+    @GetMapping("/project-category/{id}")
+    public String projectcategory(@PathVariable("id") long categoryId,
+                                  @RequestParam(defaultValue = "0") int page,
+                                  @RequestParam(defaultValue = "4") int size,
+                                  Model model,
+                                  Principal principal
+    ) {
+        if (principal != null) {
+            // Kiểm tra nếu người dùng đăng nhập qua OAuth2 (ví dụ: Google)
+            if (principal instanceof org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken oauth2Token) {
+                // Trích xuất thông tin email từ Google
+                Map<String, Object> attributes = oauth2Token.getPrincipal().getAttributes();
+                String email = (String) attributes.get("email");
+                model.addAttribute("userEmail", email);
+            } else {
+                // Trường hợp người dùng đăng nhập qua form login
+                String email = principal.getName();  // Đây là tên người dùng từ form login
+                model.addAttribute("userEmail", email);
+            }
+        } else {
+            // Nếu người dùng chưa đăng nhập, hiển thị là khách
+            model.addAttribute("userEmail", "Guest");
+        }
+        Pageable pageable = PageRequest.of(page, size);
+        Page<ProjectDto> projectPage = projectService.findByCategory_Id(categoryId,pageable);
+        List<CategoryDto> categoryDtoList = categoryService.findAllCategories();
+        model.addAttribute("projects", projectPage.getContent());
+        model.addAttribute("currentPage", projectPage.getNumber());
+        model.addAttribute("totalPages", projectPage.getTotalPages());
+        model.addAttribute("categories", categoryDtoList);
+        System.out.println("Categories: " + projectPage.getTotalPages());
         return "project-list";
     }
 
