@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -50,7 +51,8 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public Page<ProjectDto> findByCategory_Id(Long categoryId,Pageable pageable) {
-        Page<Project> projects = projectRepository.findByCategory_Id(categoryId,pageable);
+        LocalDate today = LocalDate.now();
+        Page<Project> projects = projectRepository.findByCategoryWithConditions(categoryId,today,pageable);
         //List<Project> projects=projectRepository.findByCategory_Id(categoryId);
         return
                 projects.map(project ->ProjectDto.builder()
@@ -170,7 +172,8 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public Page<ProjectDto> findAll(Pageable pageable) {
-        Page<Project> projects = projectRepository.findAll(pageable);
+        LocalDate today = LocalDate.now();
+        Page<Project> projects = projectRepository.findValidProjects(today,pageable);
 
         return
                 projects.map(project ->ProjectDto.builder()

@@ -5,7 +5,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface ProjectRepository extends JpaRepository<Project, Long> {
@@ -15,6 +17,19 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
     // Lấy ra tổng số lượng dự án
     @Query("SELECT COUNT(*) FROM Project")
     int countAllProjects();
-    Page<Project> findByCategory_Id(Long categoryId,Pageable pageable);
-    Page<Project> findAll(Pageable pageable);
+    @Query("SELECT p FROM Project p " +
+            "WHERE p.category.id = :categoryId " +
+            "AND p.endTime >= :currentDate " +
+            "AND p.startTime <= :currentDate " +
+            "AND p.currentAmount < p.targetAmount " +
+            "AND p.status = 'Đã duyệt'")
+    Page<Project> findByCategoryWithConditions(@Param("categoryId") Long categoryId,
+                                               @Param("currentDate") LocalDate currentDate,
+                                               Pageable pageable);
+    @Query("SELECT p FROM Project p " +
+            "WHERE p.endTime >= :currentDate " +
+            "AND p.startTime <= :currentDate " +
+            "AND p.currentAmount < p.targetAmount " +
+            "AND p.status = 'Đã duyệt'")
+    Page<Project> findValidProjects(@Param("currentDate") LocalDate currentDate, Pageable pageable);
 }

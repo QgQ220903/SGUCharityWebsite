@@ -62,7 +62,7 @@ public class ProjectController {
     @GetMapping("/project")
     public String home(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "4") int size,
+            @RequestParam(defaultValue = "6") int size,
             Model model,
             Principal principal
     ) {
@@ -95,7 +95,7 @@ public class ProjectController {
     @GetMapping("/project-category/{id}")
     public String projectcategory(@PathVariable("id") long categoryId,
                                   @RequestParam(defaultValue = "0") int page,
-                                  @RequestParam(defaultValue = "4") int size,
+                                  @RequestParam(defaultValue = "6") int size,
                                   Model model,
                                   Principal principal
     ) {
