@@ -10,6 +10,7 @@ import com.web.sgucharitywebsite.service.ProjectService;
 import com.web.sgucharitywebsite.service.TransactionService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,6 +27,7 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.Map;
 
 @Controller
 // VNPAYController
@@ -82,8 +84,13 @@ public class VNPAYController {
 
         Transaction transaction = new Transaction();
         if (principal != null) {
-            String email = principal.getName();
-            transaction.setEmail(email);
+            if (principal instanceof OAuth2AuthenticationToken) {
+                OAuth2AuthenticationToken oauthToken = (OAuth2AuthenticationToken) principal;
+                Map<String, Object> attributes = oauthToken.getPrincipal().getAttributes();
+                transaction.setEmail((String) attributes.get("email"));
+            } else {
+                transaction.setEmail(principal.getName());
+            }
         } else {
             transaction.setEmail("Ẩn Danh");
         }
